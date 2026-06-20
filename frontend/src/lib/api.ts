@@ -46,6 +46,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ request: requestStr, mode }),
     }),
+  kAnon: (prefix: string) =>
+    request<{ prefix: string; hashes: string[] }>(`/api/v1/exposure/k-anon/${prefix}`),
   consulted: () => request<ConsultedScan[]>("/api/v1/exposure/consulted"),
   breachesRecent: () => request<{ breaches: unknown }>("/api/v1/exposure/breaches-recent"),
   dashboardKpis: () => request<DashboardKpis>("/api/v1/dashboard/kpis"),
@@ -83,7 +85,7 @@ export type ScanResult = {
   risk: { score: number; level: string; barColor: string };
   recommendations: Array<{ priority: string; color: string; items: string[] }>;
 };
-export type ConsultedScan = { query: string; searchType: string; riskScore: number; totalLogins: number; timestamp: string };
+export type ConsultedScan = { searchType: string; riskScore: number; totalLogins: number; timestamp: string };
 export type DashboardKpis = { threatsToday: number; critical: number; verified: number; pending: number; actors: number; sectors: number };
 export type ChartData = {
   sectors: { labels: string[]; data: number[] };

@@ -17,3 +17,5 @@ playwright==1.49.1
 openai==1.58.1
 faiss-cpu==1.9.0.post1
 numpy==2.2.1
+pytest==8.3.4
+pytest-asyncio==0.24.0
