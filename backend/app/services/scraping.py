@@ -69,3 +69,46 @@ async def scrape_dynamic(url: str) -> dict[str, Any]:
         return result
     except Exception as exc:
         return {"url": url, "method": "playwright", "error": str(exc)}
+
+
+RANSOMWARE_FEED_URL = "https://api.ransomware.live/recentvictims"
+RANSOMWARE_CACHE_KEY = "scrape:ransomware:recent"
+
+
+def parse_ransomware_victims(data: object) -> list[dict[str, Any]]:
+    if not isinstance(data, list):
+        return []
+    victims: list[dict[str, Any]] = []
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        victims.append(
+            {
+                "actor": item.get("group_name") or item.get("group") or "Unknown",
+                "victim": item.get("post_title") or item.get("victim") or "Unknown",
+                "date": item.get("discovered") or item.get("date") or "",
+                "url": item.get("post_url") or item.get("url") or "",
+                "country": item.get("country") or "Unknown",
+            }
+        )
+    return victims[:50]
+
+
+async def scrape_ransomware_feed() -> list[dict[str, Any]]:
+    cached = await cache_get(RANSOMWARE_CACHE_KEY)
+    if cached and isinstance(cached, list):
+        return cached
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(RANSOMWARE_FEED_URL, timeout=aiohttp.ClientTimeout(total=30)) as resp:
+                if resp.status != 200:
+                    return []
+                data = await resp.json()
+    except Exception:
+        return []
+
+    victims = parse_ransomware_victims(data)
+    if victims:
+        await cache_set(RANSOMWARE_CACHE_KEY, victims, ttl_seconds=900)
+    return victims

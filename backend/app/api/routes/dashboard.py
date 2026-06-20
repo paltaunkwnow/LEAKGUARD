@@ -5,9 +5,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.redis_client import cache_get
 from app.data.seed import DARKWEB_LEAKS, THREATS, incident_to_api
 from app.models.incident import Incident
 from app.services.ai_rag import ai_safety_metrics
+from app.services.scraping import RANSOMWARE_CACHE_KEY, scrape_ransomware_feed
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -64,6 +66,15 @@ async def dashboard_charts(db: Annotated[AsyncSession, Depends(get_db)]):
 @router.get("/darkweb")
 async def darkweb_leaks():
     return {"items": DARKWEB_LEAKS}
+
+
+@router.get("/ransomware-feed")
+async def ransomware_feed():
+    cached = await cache_get(RANSOMWARE_CACHE_KEY)
+    if cached and isinstance(cached, list):
+        return {"source": "ransomware.live", "items": cached}
+    items = await scrape_ransomware_feed()
+    return {"source": "ransomware.live", "items": items}
 
 
 @router.get("/ai-safety")

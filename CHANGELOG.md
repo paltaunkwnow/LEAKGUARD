@@ -6,7 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [3.2.0] - 2026-06-20
+## [3.3.0] - 2026-06-20
+
+### Added
+
+- **Fase B (SDD-plan):** pytest suite (28 tests), vitest frontend (2 tests), GitHub Actions CI
+- **Fase C parcial:** K-Anonymity (`/api/v1/exposure/k-anon/{prefix}`), `query_hash` en consulted_scans
+- Scraper ransomware.live con cache Redis y scheduler cada 15 min
+- Endpoint `GET /api/v1/dashboard/ransomware-feed`
+
+### Changed
+
+- `consulted_scans` ya no guarda la query en texto claro (solo `search_type` + hash)
+- SDD-plan actualizado con estado de ejecución por tarea
+
+---
 
 ### Fixed
 

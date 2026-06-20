@@ -11,8 +11,8 @@
 | Fase | Estado | Objetivo |
 |------|--------|----------|
 | **A — Alineación documentación** | ✅ Completada | SDD v3.2 refleja código real |
-| **B — Calidad y tests** | ⚠️ En progreso | pytest + vitest + smoke tests (SDD §8) |
-| **C — Privacidad y scraping** | 🔜 Pendiente | K-Anonymity, scrapers autónomos, cron → Redis |
+| **B — Calidad y tests** | ✅ Completada | pytest (28) + vitest (2) + CI (SDD §8) |
+| **C — Privacidad y scraping** | ⚠️ En progreso | K-Anonymity ✅, scraper ransomware ✅, ingesta PG 🔜 |
 | **D — Inteligencia avanzada** | 🔜 Pendiente | OTX/Ransomware.live, resúmenes ejecutivos, alertas push |
 | **E — Producción** | 🔜 Pendiente | WebSockets, Tor pool, CI/CD, deploy |
 
@@ -64,6 +64,18 @@
 ---
 
 ## 4. Plan de ejecución detallado
+
+### Estado de ejecución (2026-06-20)
+
+| Tarea | Estado |
+|-------|--------|
+| B1–B6 Tests y CI | ✅ Completado |
+| C1 K-Anonymity | ✅ Completado |
+| C2 Privacidad consulted_scans | ✅ Completado |
+| C3 Scraper ransomware + scheduler | ✅ Completado |
+| C4 Ingesta PostgreSQL | 🔜 Pendiente |
+| D1–D4 Inteligencia | 🔜 Pendiente |
+| E1–E4 Producción | 🔜 Pendiente |
 
 ---
 

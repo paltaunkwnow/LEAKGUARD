@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import asyncio
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import ai, auth, dashboard, exposure, threats
 from app.core.config import settings
 from app.core.database import async_session, init_db
+from app.core.scheduler import scraping_loop
 from app.data.seed import seed_database
 
 
@@ -14,7 +16,13 @@ async def lifespan(_app: FastAPI):
     await init_db()
     async with async_session() as session:
         await seed_database(session)
+    scrape_task = asyncio.create_task(scraping_loop())
     yield
+    scrape_task.cancel()
+    try:
+        await scrape_task
+    except asyncio.CancelledError:
+        pass
 
 
 app = FastAPI(title="LeakGuard API", version="2.0.0", lifespan=lifespan)

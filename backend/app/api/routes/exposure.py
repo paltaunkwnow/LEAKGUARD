@@ -16,6 +16,7 @@ from app.services.exposure import (
     generate_recommendations,
     parse_osint_response,
 )
+from app.services.k_anonymity import hash_query
 from app.services.osint import query_osint
 
 router = APIRouter(prefix="/exposure", tags=["exposure"])
@@ -55,7 +56,8 @@ async def exposure_scan(
 
     scan = ConsultedScan(
         user_id=user.id if user else None,
-        query=query,
+        query=search_type,
+        query_hash=hash_query(query),
         search_type=search_type,
         risk_score=float(risk["score"]),
         total_logins=int(stats.get("apiTotalResults") or stats.get("totalLogins") or len(records)),
@@ -85,7 +87,6 @@ async def consulted_scans(
     result = await db.execute(q)
     return [
         {
-            "query": s.query,
             "searchType": s.search_type,
             "riskScore": s.risk_score,
             "totalLogins": s.total_logins,
@@ -93,6 +94,17 @@ async def consulted_scans(
         }
         for s in result.scalars().all()
     ]
+
+
+@router.get("/k-anon/{prefix}")
+async def k_anon_search(prefix: str, db: Annotated[AsyncSession, Depends(get_db)]):
+    if len(prefix) < 5 or len(prefix) > 10:
+        raise HTTPException(status_code=400, detail="Prefijo debe tener 5-10 caracteres")
+    result = await db.execute(
+        select(ConsultedScan.query_hash).where(ConsultedScan.query_hash.startswith(prefix))
+    )
+    hashes = [row[0] for row in result.all() if row[0]]
+    return {"prefix": prefix, "hashes": hashes}
 
 
 @router.post("/breach-check")
