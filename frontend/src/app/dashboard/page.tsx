@@ -263,8 +263,15 @@ export default function DashboardPage() {
               {!consulted.length && <p className="text-slate-500">Sin consultas aún.</p>}
               {consulted.map((s, i) => (
                 <div key={i} className="flex justify-between border-b border-slate-800/40 py-2">
-                  <span className="truncate">{s.searchType}</span>
-                  <span className="font-mono text-cyan-400">{s.riskScore}%</span>
+                  <div className="flex flex-col truncate pr-2">
+                    <span className="truncate text-slate-200 font-medium">
+                      {s.query && s.query !== s.searchType ? s.query : s.searchType}
+                    </span>
+                    {s.query && s.query !== s.searchType && (
+                      <span className="text-[10px] text-slate-500">{s.searchType}</span>
+                    )}
+                  </div>
+                  <span className="font-mono text-cyan-400 self-center">{s.riskScore}%</span>
                 </div>
               ))}
             </CardContent>

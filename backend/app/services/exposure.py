@@ -140,14 +140,19 @@ def calculate_real_risk_percent(stats: dict[str, Any], records: list[dict[str, A
     score += min(30, plaintext * 6)
     score += min(12, hashed * 2)
 
+    has_passwords = (plaintext > 0 or hashed > 0)
+
     if login_count >= 50:
-        score = max(score, 85)
+        score = max(score, 85 if has_passwords else 45)
     elif login_count >= 20:
-        score = max(score, 70)
+        score = max(score, 70 if has_passwords else 35)
     elif login_count >= 5:
-        score = max(score, 55)
+        score = max(score, 55 if has_passwords else 25)
+
     if plaintext >= 3:
         score = max(score, 78)
+    elif plaintext >= 1:
+        score = max(score, 60)
 
     score = round(min(99, max(8, score)))
 

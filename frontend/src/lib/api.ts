@@ -106,7 +106,7 @@ export type ScanResult = {
   risk: { score: number; level: string; barColor: string };
   recommendations: Array<{ priority: string; color: string; items: string[] }>;
 };
-export type ConsultedScan = { searchType: string; riskScore: number; totalLogins: number; timestamp: string };
+export type ConsultedScan = { query?: string; searchType: string; riskScore: number; totalLogins: number; timestamp: string };
 export type DashboardKpis = { threatsToday: number; critical: number; verified: number; pending: number; actors: number; sectors: number };
 export type ChartData = {
   sectors: { labels: string[]; data: number[] };

@@ -56,7 +56,7 @@ async def exposure_scan(
 
     scan = ConsultedScan(
         user_id=user.id if user else None,
-        query=search_type,
+        query=query,
         query_hash=hash_query(query),
         search_type=search_type,
         risk_score=float(risk["score"]),
@@ -87,6 +87,7 @@ async def consulted_scans(
     result = await db.execute(q)
     return [
         {
+            "query": s.query,
             "searchType": s.search_type,
             "riskScore": s.risk_score,
             "totalLogins": s.total_logins,
