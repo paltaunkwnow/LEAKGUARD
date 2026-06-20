@@ -4,7 +4,7 @@ import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import ai, auth, dashboard, exposure, threats
+from app.api.routes import ai, auth, dashboard, exposure, notifications, threats
 from app.core.config import settings
 from app.core.database import async_session, init_db
 from app.core.scheduler import scraping_loop
@@ -36,6 +36,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, prefix="/api/v1")
+app.include_router(notifications.router, prefix="/api/v1")
 app.include_router(threats.router, prefix="/api/v1")
 app.include_router(exposure.router, prefix="/api/v1")
 app.include_router(dashboard.router, prefix="/api/v1")

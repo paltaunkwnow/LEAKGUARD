@@ -25,7 +25,7 @@ class LoginRequest(BaseModel):
 class ScanRequest(BaseModel):
     request: str = Field(min_length=1)
     mode: str = "domain"
-    limit: int = 500
+    limit: int = Field(default=500, ge=100, le=10000)
     lang: str = "es"
 
 

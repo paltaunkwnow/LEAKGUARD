@@ -3,7 +3,7 @@ import os
 # Must be set before importing app modules (engine reads settings at import time).
 os.environ.setdefault(
     "DATABASE_URL",
-    "postgresql+asyncpg://leakguard:leakguard@localhost:5432/leakguard",
+    "postgresql+asyncpg://leakguard:leakguard@localhost:5433/leakguard",
 )
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
 os.environ.setdefault("SECRET_KEY", "test-secret-key")

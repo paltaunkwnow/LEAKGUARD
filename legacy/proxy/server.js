@@ -23,7 +23,7 @@ app.post('/api/scan', async (req, res) => {
     return res.status(400).json({ error: 'Parámetro request requerido' });
   }
 
-  const safeLimit = Math.min(10000, Math.max(10, Number(limit) || 500));
+  const safeLimit = Math.min(10000, Math.max(100, Number(limit) || 500));
 
   try {
     const upstream = await fetch(UPSTREAM, {

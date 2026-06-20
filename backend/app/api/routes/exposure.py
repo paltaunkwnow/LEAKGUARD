@@ -17,6 +17,7 @@ from app.services.exposure import (
     parse_osint_response,
 )
 from app.services.k_anonymity import hash_query
+from app.services.notifications import create_notification
 from app.services.osint import query_osint
 
 router = APIRouter(prefix="/exposure", tags=["exposure"])
@@ -33,17 +34,29 @@ async def exposure_scan(
         raise HTTPException(status_code=400, detail="Parámetro request requerido")
 
     search_type = detect_search_type(query, body.mode)
+    is_email_query = body.mode == "email" or "@" in query
 
     try:
         raw = await query_osint(query, limit=body.limit, lang=body.lang)
     except ValueError as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+        if is_email_query:
+            raw = None
+        else:
+            raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
-        raise HTTPException(status_code=502, detail="Motor de indexación no disponible") from exc
+        if is_email_query:
+            raw = None
+        else:
+            raise HTTPException(
+                status_code=502,
+                detail=str(exc) or "Motor de indexación no disponible",
+            ) from exc
 
     records, stats = parse_osint_response(raw)
+    if raw is None:
+        stats["fromApi"] = False
 
-    if body.mode == "email" or "@" in query:
+    if is_email_query:
         try:
             xon_raw = await check_email_breach(query)
             xon = parse_breach_check(xon_raw)
@@ -63,6 +76,15 @@ async def exposure_scan(
         total_logins=int(stats.get("apiTotalResults") or stats.get("totalLogins") or len(records)),
     )
     db.add(scan)
+    if user:
+        alert_type = "warning" if risk["score"] >= 60 else "success" if risk["score"] < 30 else "info"
+        await create_notification(
+            db,
+            user.id,
+            alert_type,
+            "exposure",
+            f"Exposure check completado ({search_type}) — riesgo {risk['score']}%",
+        )
     await db.commit()
 
     return {

@@ -11,6 +11,7 @@ from app.models.audit_log import AuditLog
 from app.models.incident import Incident
 from app.models.user import User
 from app.schemas import VerifyIncidentRequest
+from app.services.notifications import create_notification
 
 router = APIRouter(prefix="/threats", tags=["threats"])
 
@@ -70,5 +71,12 @@ async def verify_incident(
 
     row.verification_status = new_status
     db.add(AuditLog(analyst=user.name, action=body.action, reason=body.reason))
+    await create_notification(
+        db,
+        user.id,
+        "info",
+        "admin",
+        f"Incidente {incident_id} actualizado a {new_status} por {user.name}",
+    )
     await db.commit()
     return incident_to_api(row)

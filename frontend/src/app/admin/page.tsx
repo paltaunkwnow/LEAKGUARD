@@ -8,8 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge, statusBadge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { api, Threat, AuditEntry } from "@/lib/api";
+import { useNotifications } from "@/contexts/notifications-context";
+import { useToast } from "@/contexts/toast-context";
 
 export default function AdminPage() {
+  const { show } = useToast();
+  const { refresh } = useNotifications();
   const [queue, setQueue] = useState<{ pending: number; verified: number; rejected: number; incidents: Threat[] } | null>(null);
   const [audits, setAudits] = useState<AuditEntry[]>([]);
   const [selected, setSelected] = useState<Threat | null>(null);
@@ -25,6 +29,8 @@ export default function AdminPage() {
   const verify = async (action: string) => {
     if (!selected || !reason.trim()) return;
     await api.verifyThreat(selected.id, action, reason);
+    show(`Incidente ${selected.id} auditado: ${action}`, "success");
+    await refresh();
     setReason("");
     setSelected(null);
     load();

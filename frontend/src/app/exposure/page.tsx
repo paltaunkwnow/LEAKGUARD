@@ -8,10 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge, statusBadge } from "@/components/ui/badge";
 import { api, ScanResult } from "@/lib/api";
+import { useNotifications } from "@/contexts/notifications-context";
+import { useToast } from "@/contexts/toast-context";
 
 type Mode = "domain" | "email" | "phone";
 
 export default function ExposurePage() {
+  const { show } = useToast();
+  const { refresh } = useNotifications();
   const [mode, setMode] = useState<Mode>("domain");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +29,12 @@ export default function ExposurePage() {
     try {
       const data = await api.scan(query.trim(), mode);
       setResult(data);
+      const score = data.risk.score;
+      show(
+        `Escaneo completado — riesgo ${score}%`,
+        score >= 60 ? "warning" : score < 30 ? "success" : "info"
+      );
+      await refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error en escaneo");
     } finally {

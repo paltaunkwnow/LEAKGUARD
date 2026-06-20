@@ -1,13 +1,11 @@
 /**
- * Browser: use NEXT_PUBLIC_API_URL when set (Docker/direct); else relative URL for Next rewrites.
- * Server (SSR/rewrites): use INTERNAL_API_URL for Docker internal networking.
+ * Browser: relative URLs via Next rewrites. SSR: INTERNAL_API_URL (Docker) or NEXT_PUBLIC_API_URL.
  */
 const API_BASE =
   (typeof window === "undefined"
-    ? process.env.INTERNAL_API_URL
+    ? process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL
     : process.env.NEXT_PUBLIC_API_URL)?.replace(/\/$/, "") ??
-  (typeof window !== "undefined" ? "" : "http://localhost:8000");
-
+  (typeof window !== "undefined" ? "" : "http://localhost:8888");
 function parseApiError(data: unknown, status: number): string {
   const body = data as { detail?: string | Array<{ msg?: string }>; error?: string };
   if (typeof body.detail === "string") return body.detail;
@@ -80,10 +78,24 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ context, question }),
     }),
+  notifications: () => request<NotificationItem[]>("/api/v1/notifications"),
+  notificationsUnreadCount: () => request<{ count: number }>("/api/v1/notifications/unread-count"),
+  markNotificationRead: (id: number) =>
+    request<{ ok: boolean }>(`/api/v1/notifications/${id}/read`, { method: "PATCH" }),
+  markAllNotificationsRead: () =>
+    request<{ updated: number }>("/api/v1/notifications/mark-all-read", { method: "POST" }),
 };
 
 export type User = { id: number; email: string; name: string; role: string; clearance: string };
 export type BreachAlert = { type: string; message: string };
+export type NotificationItem = {
+  id: number;
+  type: string;
+  category: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+};
 export type Threat = Record<string, unknown> & {
   id: string;
   date: string;

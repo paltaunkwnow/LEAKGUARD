@@ -11,6 +11,7 @@ from app.models.user import User
 from app.schemas import LoginRequest, RegisterRequest, TokenResponse
 from app.services.breach import check_email_breach, parse_breach_check
 from app.services.censor import censor_email
+from app.services.notifications import create_notification
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -40,6 +41,12 @@ async def register(body: RegisterRequest, db: Annotated[AsyncSession, Depends(ge
     except Exception:
         breach_alert = {"type": "info", "message": f"No se pudo verificar filtraciones para {censor_email(body.email)}"}
 
+    if breach_alert:
+        await create_notification(
+            db, user.id, breach_alert["type"], "account-breach", breach_alert["message"]
+        )
+        await db.commit()
+
     token = create_access_token(user.email, {"uid": user.id, "name": user.name})
     return TokenResponse(
         access_token=token,
@@ -62,6 +69,12 @@ async def login(body: LoginRequest, db: Annotated[AsyncSession, Depends(get_db)]
         breach_alert = _format_breach_alert(parsed, body.email, is_register=False)
     except Exception:
         breach_alert = {"type": "info", "message": f"No se pudo verificar filtraciones para {censor_email(body.email)}"}
+
+    if breach_alert:
+        await create_notification(
+            db, user.id, breach_alert["type"], "account-breach", breach_alert["message"]
+        )
+        await db.commit()
 
     token = create_access_token(user.email, {"uid": user.id, "name": user.name})
     return TokenResponse(

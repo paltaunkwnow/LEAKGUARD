@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Shield, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
+import { NotificationBell } from "@/components/layout/notification-bell";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
           <div className="flex items-center gap-3 text-sm">
+            <NotificationBell />
             <div className="text-right hidden sm:block">
               <div className="font-medium">{user.name}</div>
               <div className="text-xs text-slate-500">{user.role}</div>
