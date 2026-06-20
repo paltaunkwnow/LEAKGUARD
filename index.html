@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeakGuard - AI Threat Intelligence & Leak Verification</title>
+  <meta name="description" content="AI-Powered Threat Intelligence and Leak Verification Platform. Monitor cyber threat reports, ransomware disclosures, and verify leaks with explainable AI.">
+  
+  <!-- CSS Stylesheets -->
+  <link href="styles.css" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              bg: '#030712',
+              card: 'rgba(15, 23, 42, 0.45)',
+              accentCyan: '#22d3ee',
+              accentPurple: '#a855f7',
+              accentBlue: '#3b82f6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#030712] text-slate-100 min-h-screen relative selection:bg-cyan-500/30 selection:text-cyan-200">
+
+  <!-- Cyber Animated Matrix Grid Background for Landing / SaaS Shell -->
+  <div class="fixed inset-0 cyber-grid opacity-30 z-[-10] pointer-events-none"></div>
+
+  <!-- Global Toast Alerts Wrapper -->
+  <div id="toast-wrapper" class="fixed top-6 right-6 z-[9999] flex flex-col gap-3"></div>
+
+  <!-- ==============================================
+       1.5. LOGIN / REGISTER VIEW
+       ============================================== -->
+  <div id="login-view" class="view-screen min-h-screen flex items-center justify-center relative z-10 hidden">
+    <div class="absolute w-[300px] h-[300px] rounded-full bg-cyan-500/5 blur-[120px] top-10 left-10 -z-10 pointer-events-none"></div>
+    <div class="absolute w-[300px] h-[300px] rounded-full bg-purple-500/5 blur-[120px] bottom-10 right-10 -z-10 pointer-events-none"></div>
+    
+    <div class="glass-card w-full max-w-md p-8 rounded-2xl border border-slate-800/80 shadow-2xl relative glow-cyan">
+      <div class="flex flex-col items-center mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[1.5px] shadow-lg shadow-cyan-500/20 mb-3">
+          <div class="w-full h-full bg-slate-950 rounded-xl flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-6 h-6 text-cyan-400"></i>
+          </div>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-white text-center">LeakGuard Access Portal</h2>
+        <p class="text-xs text-slate-400 mt-1 text-center">Secured Threat Intelligence Environment</p>
+      </div>
+
+      <!-- Auth Tab Selector -->
+      <div class="flex border-b border-slate-800 mb-6">
+        <button id="login-tab-btn" onclick="toggleAuthTab('login')" class="flex-1 pb-3 text-sm font-semibold border-b-2 border-cyan-400 text-cyan-400 transition-colors">Sign In</button>
+        <button id="register-tab-btn" onclick="toggleAuthTab('register')" class="flex-1 pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">Create Account</button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="login-form" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Analyst Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i data-lucide="mail" class="w-4 h-4"></i></span>
+            <input type="email" id="login-email" required placeholder="analyst@leakguard.internal" class="w-full pl-9 pr-4 py-2.5 border border-slate-800 bg-slate-950/60 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Secret Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i data-lucide="key" class="w-4 h-4"></i></span>
+            <input type="password" id="login-password" required placeholder="••••••••••••" class="w-full pl-9 pr-4 py-2.5 border border-slate-800 bg-slate-950/60 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold rounded-lg text-sm transition-all active:scale-98 shadow-md shadow-cyan-500/10">Authorize Session</button>
+      </form>
+
+      <!-- Register Form (Hidden initially) -->
+      <form id="register-form" onsubmit="handleAuthSubmit(event, 'register')" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Analyst Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i data-lucide="mail" class="w-4 h-4"></i></span>
+            <input type="email" id="register-email" required placeholder="analyst@leakguard.internal" class="w-full pl-9 pr-4 py-2.5 border border-slate-800 bg-slate-950/60 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Select Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i data-lucide="key" class="w-4 h-4"></i></span>
+            <input type="password" id="register-password" required placeholder="••••••••••••" class="w-full pl-9 pr-4 py-2.5 border border-slate-800 bg-slate-950/60 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-colors">
+          </div>
+        </div>
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold rounded-lg text-sm transition-all active:scale-98 shadow-md shadow-purple-500/10">Create Analyst Account</button>
+      </form>
+
+      <!-- Firebase Setup Config Trigger & Offline Mode -->
+      <div class="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs">
+        <button onclick="toggleFirebaseConfigModal()" class="text-slate-400 hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+          <span>Firebase Settings</span>
+        </button>
+        <button onclick="bypassAuthForDemo()" class="text-slate-500 hover:text-slate-300 font-mono tracking-tighter hover:underline">
+          [offline_bypass_mode]
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Configuration Modal Dialog -->
+  <div id="firebase-config-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="glass-card w-full max-w-lg p-6 rounded-xl border border-slate-800/80 shadow-2xl relative">
+      <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-800/60">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="database" class="w-5 h-5 text-cyan-400"></i>
+          <span>Firebase Connection Parameters</span>
+        </h3>
+        <button onclick="toggleFirebaseConfigModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-400 mb-4 leading-relaxed font-semibold">
+        Introduce tus credenciales de Firebase en formato JSON para conectar la autenticación en tiempo real. Se almacena localmente en localStorage.
+      </p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Configuración Firebase JSON</label>
+          <textarea id="firebase-json-input" rows="8" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "leakguard.firebaseapp.com",
+  "projectId": "leakguard",
+  "storageBucket": "leakguard.appspot.com",
+  "messagingSenderId": "...",
+  "appId": "..."
+}' class="w-full p-3 border border-slate-800 bg-slate-950 font-mono text-xs text-emerald-400 placeholder-slate-700 focus:outline-none focus:border-cyan-400/50 rounded-lg"></textarea>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button onclick="clearFirebaseConfig()" class="px-4 py-2 border border-slate-800 bg-slate-900 text-xs text-slate-300 rounded-lg">Borrar Config</button>
+          <button onclick="saveFirebaseConfig()" class="px-5 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs rounded-lg shadow shadow-cyan-500/10">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       1. LANDING PAGE
+       ============================================== -->
+  <div id="landing-view" class="view-screen min-h-screen flex flex-col relative z-10">
+    <!-- Landing Navigation -->
+    <header class="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-slate-800/40">
+      <div class="flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[1.5px] shadow-lg shadow-cyan-500/10">
+          <div class="w-full h-full bg-slate-950 rounded-lg flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+        </div>
+        <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-cyan-200 to-purple-400 bg-clip-text text-transparent">LeakGuard</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="checkAuthAndEnter()" class="px-5 py-2.5 rounded-lg text-sm font-semibold border border-slate-800 hover:border-slate-700 bg-slate-950/60 hover:bg-slate-900/80 active:scale-95 transition-all text-slate-300">Enter Platform</button>
+        <button onclick="showToast('Demo request registered! Our security team will contact you shortly.', 'success')" class="px-5 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 hover:text-slate-900 shadow-md shadow-cyan-500/20 active:scale-95 transition-all">Request Demo</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-6 pt-20 pb-16 text-center relative flex-grow flex flex-col justify-center items-center">
+      <!-- Glow background highlights -->
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-cyan-500/5 blur-[120px] top-10 left-1/4 -z-10 pointer-events-none"></div>
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-purple-500/5 blur-[120px] bottom-10 right-1/4 -z-10 pointer-events-none"></div>
+
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 text-xs font-semibold mb-6 animate-pulse">
+        <span class="status-indicator status-active"></span>
+        Threat Intelligence & AI Leak Verification Platform
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-4xl leading-tight">
+        <span class="bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">Leak</span><span class="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Guard</span>
+      </h1>
+      
+      <p class="text-xl md:text-2xl font-medium text-slate-300 mb-4 max-w-3xl">
+        AI-Powered Threat Intelligence & Leak Verification Platform
+      </p>
+      
+      <p class="text-base md:text-lg text-slate-400 mb-10 max-w-2xl leading-relaxed">
+        Transform cyber threat intelligence into explainable, actionable, and verified security insights. Filter noise, prevent hallucinations, and protect assets with explainable AI models under human oversight.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 mb-16">
+        <button onclick="checkAuthAndEnter()" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:opacity-90 text-white shadow-xl shadow-cyan-500/10 hover:shadow-cyan-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+          <span>Launch Dashboard</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+        <button onclick="showToast('Demo request registered! Our security team will contact you.', 'success')" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold border border-slate-800 bg-slate-900/30 hover:bg-slate-800/40 text-slate-300 hover:text-white transition-all">
+          Request Demo
+        </button>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-slate-900/60 w-full">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-extrabold text-white tracking-tight mb-4">Core Platform Pillars</h2>
+        <p class="text-slate-400 max-w-xl mx-auto">Defending organizations against information exposure with AI-enhanced auditing and threat monitoring workflows.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass-card p-8 rounded-xl border border-slate-800/60 relative overflow-hidden group">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-colors"></div>
+          <div class="w-12 h-12 rounded-lg bg-cyan-950/40 flex items-center justify-center border border-cyan-800/30 text-cyan-400 mb-6">
+            <i data-lucide="search" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3">AI OSINT Scan Engine</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Continuous automated tracking of ransomware blogs, public PasteBins, darknet message boards, and security advisory posts.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-xl border border-slate-800/60 relative overflow-hidden group">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
+          <div class="w-12 h-12 rounded-lg bg-purple-950/40 flex items-center justify-center border border-purple-800/30 text-purple-400 mb-6">
+            <i data-lucide="eye" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3">Explainable Risk Scores</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">No black box decisions. Our system clearly prints evidence parameters, extracted indicators, and checklists behind every score.</p>
+        </div>
+
+        <div class="glass-card p-8 rounded-xl border border-slate-800/60 relative overflow-hidden group">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors"></div>
+          <div class="w-12 h-12 rounded-lg bg-blue-950/40 flex items-center justify-center border border-blue-800/30 text-blue-400 mb-6">
+            <i data-lucide="user-check" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-100 mb-3">Human-in-the-Loop Audit</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Empower cybersecurity analysts to confirm, reject, or request additional data before flagging systems or alerting executives.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Explainability & Safety Flow Section -->
+    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-slate-900/60 w-full relative">
+      <div class="absolute w-[300px] h-[300px] rounded-full bg-purple-500/5 blur-2xl bottom-1/4 left-10 -z-10 pointer-events-none"></div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3 block">Safety & Integrity</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-6">Hallucination Mitigation & Data Security</h2>
+          
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-purple-950/50 flex-shrink-0 flex items-center justify-center border border-purple-800/30 text-purple-400">
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-200">Cryptographic Verification</h4>
+                <p class="text-slate-400 text-sm mt-1">AI models parse files, but validation requires exact matches against verified public key signatures, checksum logs, and data integrity layers.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-purple-950/50 flex-shrink-0 flex items-center justify-center border border-purple-800/30 text-purple-400">
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-200">Zero-Temperature RAG Schemas</h4>
+                <p class="text-slate-400 text-sm mt-1">Our prompt engines prevent creative language. Strict schemas force models to rely exclusively on raw JSON evidence blocks, avoiding false-positive panic reports.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-purple-950/50 flex-shrink-0 flex items-center justify-center border border-purple-800/30 text-purple-400">
+                <i data-lucide="check" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-200">Continuous Logging & Audit Trails</h4>
+                <p class="text-slate-400 text-sm mt-1">Every AI assessment, prompt template, and human analyst modification is stored on an immutable audit log for absolute system auditability.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl border border-slate-800/60 relative glow-purple">
+          <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-800/50">
+            <span class="text-xs font-mono text-purple-400">PIPELINE STAGE: AI_SYNTHESIS_MODEL</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-800/50">ACTIVE GATE</span>
+          </div>
+          <pre class="bg-slate-950/80 p-4 rounded-lg text-xs text-slate-300 font-mono overflow-x-auto">
+{
+  "incident_id": "TR-2026-049",
+  "evidence_match_confidence": 0.96,
+  "hallucination_index": 0.02,
+  "rules_evaluated": [
+    "credential_matching_regex",
+    "ransomware_onion_signature"
+  ],
+  "mitigation_priority": "CRITICAL",
+  "reasoning_explanation": "Extracted password hashes correspond strictly to active corporate patterns. External IP binding correlates with verified threat actor LockBit infrastructure."
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-auto w-full border-t border-slate-900/60 py-8 bg-slate-950/40">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-slate-500">&copy; 2026 LeakGuard. Built for threat intelligence and cybersecurity safety.</p>
+        <div class="flex gap-6 text-xs text-slate-400">
+          <a href="#" onclick="showToast('Security Policy doc is coming soon', 'info')" class="hover:text-white transition-colors">Security Policy</a>
+          <a href="#" onclick="showToast('Terms of service details are under review', 'info')" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" onclick="showToast('Privacy Policy doc is coming soon', 'info')" class="hover:text-white transition-colors">Privacy Policy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- ==============================================
+       2. MAIN APP SHELL
+       ============================================== -->
+  <div id="app-shell" class="min-h-screen flex hidden">
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-950 border-r border-slate-900/60 flex flex-col flex-shrink-0 relative z-30">
+      <!-- Sidebar Logo -->
+      <div class="px-6 py-6 border-b border-slate-900/60 flex items-center gap-3 cursor-pointer" onclick="navigateTo('landing')">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 via-blue-600 to-purple-600 p-[1px] shadow-md shadow-cyan-500/10">
+          <div class="w-full h-full bg-slate-950 rounded-lg flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+          </div>
+        </div>
+        <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-cyan-100 to-purple-300 bg-clip-text text-transparent">LeakGuard</span>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="flex-grow px-4 py-6 space-y-1.5">
+        <a href="#" onclick="navigateTo('dashboard'); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all" data-tab="dashboard">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" onclick="navigateTo('threat-details'); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all text-slate-400" data-tab="threat-details">
+          <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+          <span>Threat Details</span>
+        </a>
+        <a href="#" onclick="navigateTo('exposure-check'); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all text-slate-400" data-tab="exposure-check">
+          <i data-lucide="globe" class="w-4 h-4"></i>
+          <span>Exposure Check</span>
+        </a>
+        <a href="#" onclick="navigateTo('admin-panel'); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all text-slate-400" data-tab="admin-panel">
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          <span>Admin Panel</span>
+        </a>
+        <a href="#" onclick="navigateTo('ai-safety'); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all text-slate-400" data-tab="ai-safety">
+          <i data-lucide="eye" class="w-4 h-4"></i>
+          <span>AI Safety & Transparency</span>
+        </a>
+        <a href="#" onclick="handleSignOut(); return false;" class="sidebar-nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all text-red-400 hover:bg-red-950/20 border-slate-900 hover:text-red-300" data-tab="sign-out">
+          <i data-lucide="log-out" class="w-4 h-4 text-red-400"></i>
+          <span>Sign Out Session</span>
+        </a>
+      </nav>
+
+      <!-- System status sidebar banner -->
+      <div class="p-4 border-t border-slate-900/60 m-4 bg-slate-900/30 rounded-lg">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-slate-400">SYSTEM GATEWAY</span>
+          <span class="status-indicator status-active"></span>
+        </div>
+        <div class="text-[10px] text-slate-500 font-mono">
+          <div>NODE: LG-WEST-01</div>
+          <div>INJESTION RATE: 24/s</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel wrapper -->
+    <div class="flex-grow flex flex-col min-w-0 min-h-screen">
+      <!-- Main Application Header -->
+      <header class="h-16 bg-slate-950 border-b border-slate-900/60 flex items-center justify-between px-8 relative z-20">
+        <!-- Global Search in Header -->
+        <div class="relative w-80">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i data-lucide="search" class="w-4 h-4 text-slate-500"></i>
+          </div>
+          <input type="text" id="global-search" oninput="executeGlobalSearch()" placeholder="Search Threat Feed (Actor, Victim, Sector...)" class="block w-full pl-9 pr-4 py-2 border border-slate-800 bg-slate-900/40 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-400/50 transition-colors">
+          
+          <!-- Search autocomplete panel dropdown -->
+          <div id="search-dropdown" class="absolute top-11 left-0 right-0 max-h-60 overflow-y-auto bg-slate-900 border border-slate-800 rounded-lg shadow-xl hidden z-50"></div>
+        </div>
+
+        <!-- Header Actions (Notifications & User Profile) -->
+        <div class="flex items-center gap-4">
+          <!-- Notification Center Drawer -->
+          <div class="relative">
+            <button id="notification-bell-btn" onclick="toggleNotificationCenter()" class="w-9 h-9 rounded-lg border border-slate-800 bg-slate-900/40 flex items-center justify-center text-slate-400 hover:text-white transition-colors relative">
+              <i data-lucide="bell" class="w-4.5 h-4.5"></i>
+              <span id="notification-badge" class="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 text-[8px] font-bold rounded-full bg-cyan-500 text-slate-950 hidden"></span>
+            </button>
+
+            <!-- Notifications Drawer List dropdown -->
+            <div id="notification-dropdown-menu" class="absolute top-11 right-0 w-80 bg-slate-950 border border-slate-800 rounded-xl shadow-xl hidden z-50 overflow-hidden">
+              <div class="p-3 border-b border-slate-800/50 flex justify-between items-center bg-slate-900/40">
+                <span class="text-xs font-bold text-slate-200">Security Notification Log</span>
+                <button onclick="notifications.forEach(n => n.unread = false); renderNotifications();" class="text-[10px] text-cyan-400 hover:underline">Mark all read</button>
+              </div>
+              <div id="notifications-list-container" class="max-h-60 overflow-y-auto divide-y divide-slate-800/40"></div>
+            </div>
+          </div>
+
+          <!-- Vertical separator line -->
+          <div class="h-6 w-[1px] bg-slate-800"></div>
+
+          <!-- User profile menu -->
+          <div class="flex items-center gap-3">
+            <img id="analyst-avatar-img" class="w-8 h-8 rounded-full border border-slate-700 bg-slate-900" alt="Analyst Avatar">
+            <div class="hidden md:block text-left">
+              <div id="analyst-profile-name" class="text-xs font-bold text-slate-200">Analyst Profile</div>
+              <div id="analyst-profile-role" class="text-[10px] text-slate-500">L3 Threat Lead</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main screen panels container -->
+      <main class="flex-grow p-8 overflow-y-auto">
+
+        <!-- ==============================================
+             PAGE 2: MAIN DASHBOARD VIEW
+             ============================================== -->
+        <div id="dashboard-view" class="view-screen space-y-8 hidden">
+          <!-- Welcome and title banner -->
+          <div class="flex justify-between items-center">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-white">Threat Intelligence Dashboard</h1>
+              <p class="text-sm text-slate-400 mt-1">Real-time surveillance monitoring feed of global credential leaks and cybersecurity disclosures.</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono text-slate-500">AUTO-REFRESH: EVERY 60S</span>
+            </div>
+          </div>
+
+          <!-- Top KPI metrics grid -->
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Threats Today</div>
+              <div id="kpi-threats-today" class="text-2xl font-bold text-cyan-400 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Critical Alerts</div>
+              <div id="kpi-critical" class="text-2xl font-bold text-red-500 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Verified Leaks</div>
+              <div id="kpi-verified" class="text-2xl font-bold text-emerald-400 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Pending Reviews</div>
+              <div id="kpi-pending" class="text-2xl font-bold text-yellow-500 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Threat Actors</div>
+              <div id="kpi-actors" class="text-2xl font-bold text-purple-400 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+              <div class="text-xs text-slate-400 font-semibold mb-1">Affected Sectors</div>
+              <div id="kpi-sectors" class="text-2xl font-bold text-blue-400 font-mono">0</div>
+            </div>
+          </div>
+
+          <!-- Interactive Chart.js Widgets Row -->
+          <div class="grid md:grid-cols-4 gap-6">
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-2">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-slate-200">Threat Ingestion Rate (Past 7 Days)</h3>
+                <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i>
+              </div>
+              <div class="h-48 relative">
+                <canvas id="chart-activity"></canvas>
+              </div>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+              <h3 class="text-sm font-bold text-slate-200 mb-4">Threat Risk Levels</h3>
+              <div class="h-48 relative">
+                <canvas id="chart-risk"></canvas>
+              </div>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+              <h3 class="text-sm font-bold text-slate-200 mb-4">Verification Audit</h3>
+              <div class="h-48 relative">
+                <canvas id="chart-status"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sector Breakdown & Threat Feed table row -->
+          <div class="grid md:grid-cols-4 gap-6">
+            <!-- Sector Breakdown graph -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+              <h3 class="text-sm font-bold text-slate-200 mb-4">Sector Exposure</h3>
+              <div class="h-56 relative">
+                <canvas id="chart-sector"></canvas>
+              </div>
+            </div>
+
+            <!-- Threat Intelligence Feed List Table -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-3 overflow-hidden">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-slate-200">Intelligence Feed Queue</h3>
+                <span class="text-[10px] text-slate-500 font-mono">CLICK ROW TO VIEW THREAT DETAILS</span>
+              </div>
+              
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-800/50">
+                  <thead class="bg-slate-900/40">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Date</th>
+                      <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Actor</th>
+                      <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Victim</th>
+                      <th class="px-6 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Sector</th>
+                      <th class="px-6 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Risk</th>
+                      <th class="px-6 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Confidence</th>
+                      <th class="px-6 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th class="px-6 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Audit</th>
+                    </tr>
+                  </thead>
+                  <tbody id="threat-feed-tbody" class="divide-y divide-slate-800/30">
+                    <!-- Dynamic Javascript items will sit here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             PAGE 3: THREAT DETAILS PAGE VIEW
+             ============================================== -->
+        <div id="threat-details-view" class="view-screen space-y-8 hidden">
+          <!-- Back button and Page Title -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800/50">
+            <div class="flex items-center gap-3">
+              <button onclick="navigateTo('dashboard')" class="p-2 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-colors">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              </button>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span id="detail-id" class="text-xs font-mono text-cyan-400 bg-cyan-950/30 px-2 py-0.5 rounded border border-cyan-900/50">TR-XXXX</span>
+                  <h1 class="text-xl font-bold text-white"><span id="detail-title-actor">Actor</span> target: <span id="detail-title-victim">Victim</span></h1>
+                </div>
+                <p class="text-xs text-slate-400 mt-1">Detailed forensics breakdown, system risk analysis and AI explanation matrix.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Verification Status Banner -->
+          <div id="detail-status-banner"></div>
+
+          <!-- Risk Gauges and Threat Info Details -->
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Summary Profile -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-4">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Target Profile</h3>
+              <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-xs">
+                <span class="text-slate-400">Threat Actor:</span>
+                <span id="detail-actor" class="font-bold text-slate-200"></span>
+                
+                <span class="text-slate-400">Target Victim:</span>
+                <span id="detail-victim" class="text-slate-200"></span>
+                
+                <span class="text-slate-400">Sector Focus:</span>
+                <span id="detail-sector" class="text-slate-200"></span>
+                
+                <span class="text-slate-400">Country Scope:</span>
+                <span id="detail-country" class="text-slate-200"></span>
+                
+                <span class="text-slate-400">Detection Date:</span>
+                <span id="detail-date" class="font-mono text-slate-200"></span>
+              </div>
+            </div>
+
+            <!-- Risk Score Cards -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Calculated Risk Index</h3>
+                <p class="text-xs text-slate-400 mt-1">Combined metric factoring system sensitivity and asset exposure values.</p>
+              </div>
+              <div class="py-4">
+                <div class="flex justify-between items-baseline mb-2">
+                  <span class="text-3xl font-extrabold text-red-500 font-mono" id="detail-risk-score">0</span>
+                  <span class="text-xs text-slate-400">/ 100 MAX</span>
+                </div>
+                <!-- Mini line indicator progress bar -->
+                <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                  <div id="detail-risk-gauge" class="h-full bg-red-500 shadow shadow-red-500/20 transition-all duration-500"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Confidence Assessment</h3>
+                <p class="text-xs text-slate-400 mt-1">AI assessment confidence rating based on data source integrity.</p>
+              </div>
+              <div class="py-4">
+                <div class="flex justify-between items-baseline mb-2">
+                  <span class="text-3xl font-extrabold text-cyan-400 font-mono" id="detail-confidence-score">0</span>
+                  <span class="text-xs text-slate-400">% SCORE</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                  <div id="detail-confidence-gauge" class="h-full bg-cyan-400 shadow shadow-cyan-400/20 transition-all duration-500"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explainability & Technical / Business impact splits -->
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Explainability column -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-1 space-y-4">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Why is this threat critical?</h3>
+              <div class="space-y-3 text-xs">
+                <div class="flex items-center">
+                  <span id="chk-creds" class="mr-2"></span>
+                  <span class="text-slate-300">Credentials exposed in dump</span>
+                </div>
+                <div class="flex items-center">
+                  <span id="chk-financial" class="mr-2"></span>
+                  <span class="text-slate-300">Financial records affected</span>
+                </div>
+                <div class="flex items-center">
+                  <span id="chk-actor" class="mr-2"></span>
+                  <span class="text-slate-300">Known ransomware syndicate</span>
+                </div>
+                <div class="flex items-center">
+                  <span id="chk-evidence" class="mr-2"></span>
+                  <span class="text-slate-300">Public evidence logs matching</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Impact columns -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-3">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Business Impact Analysis</h3>
+              <p id="detail-business-impact" class="text-xs text-slate-400 leading-relaxed"></p>
+            </div>
+
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-3">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Technical Impact Breakdown</h3>
+              <p id="detail-technical-impact" class="text-xs text-slate-400 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Recommendations Action Timelines -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800/60 space-y-6">
+            <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Recommended Mitigation Timeline</h3>
+            <div class="grid md:grid-cols-3 gap-6 relative">
+              <div class="space-y-2">
+                <div class="text-xs font-bold text-red-400 uppercase tracking-wider">1. Immediate Actions</div>
+                <div class="p-4 rounded-lg bg-red-950/20 border border-red-900/30 text-xs text-slate-300 leading-relaxed" id="detail-action-immediate"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="text-xs font-bold text-orange-400 uppercase tracking-wider">2. Next 24-Hour Checklist</div>
+                <div class="p-4 rounded-lg bg-orange-950/20 border border-orange-900/30 text-xs text-slate-300 leading-relaxed" id="detail-action-24h"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="text-xs font-bold text-yellow-400 uppercase tracking-wider">3. Next 7-Day Actions</div>
+                <div class="p-4 rounded-lg bg-yellow-950/20 border border-yellow-900/30 text-xs text-slate-300 leading-relaxed" id="detail-action-7d"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evidence viewer container -->
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Raw console view -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-2 space-y-3">
+              <div class="flex justify-between items-center border-b border-slate-800/50 pb-2">
+                <h3 class="text-sm font-bold text-slate-200">Extracted Intelligence Evidence</h3>
+                <span class="text-[10px] font-mono text-slate-500">SOURCE: <span id="detail-evidence-source">None</span></span>
+              </div>
+              <div class="scanlines bg-slate-950 p-4 rounded-lg border border-slate-900">
+                <pre id="detail-evidence-extracted" class="text-xs text-green-400 font-mono overflow-x-auto whitespace-pre-wrap max-h-56"></pre>
+              </div>
+            </div>
+
+            <!-- Preview panel and AI Generated Summary -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 flex flex-col justify-between space-y-4">
+              <div>
+                <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Evidence Map / Verification Preview</h3>
+                <div id="detail-screenshot-svg" class="w-full h-36 rounded-lg overflow-hidden border border-slate-800 bg-slate-950 mt-3 flex items-center justify-center">
+                  <!-- Dynamic SVG will render here -->
+                </div>
+              </div>
+              <div class="bg-slate-900/40 p-3 rounded border border-slate-800 text-xs text-slate-300">
+                <span class="font-bold text-cyan-400 block mb-1">AI Analyst Synthesizer:</span>
+                <span id="detail-evidence-summary"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             PAGE 4: EXPOSURE CHECK VIEW
+             ============================================== -->
+        <div id="exposure-check-view" class="view-screen space-y-8 hidden">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-white">Asset Exposure Scanner</h1>
+            <p class="text-sm text-slate-400 mt-1">Audit external endpoints, ransomware rosters, and OSINT directories for company exposures.</p>
+          </div>
+
+          <!-- Input bar section -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800/60 max-w-3xl">
+            <h3 class="text-sm font-bold text-slate-200 mb-3">Exposure Assessment</h3>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <button type="button" onclick="setExposureSearchMode('domain')" id="exp-mode-domain" class="exp-mode-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-cyan-500/50 bg-cyan-950/30 text-cyan-400">Dominio</button>
+              <button type="button" onclick="setExposureSearchMode('email')" id="exp-mode-email" class="exp-mode-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-800 text-slate-400 hover:border-slate-700">Correo</button>
+              <button type="button" onclick="setExposureSearchMode('phone')" id="exp-mode-phone" class="exp-mode-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-800 text-slate-400 hover:border-slate-700">Teléfono</button>
+            </div>
+            <div class="flex gap-3">
+              <input type="text" id="exposure-domain-input" placeholder="Dominio corporativo (ej. policia.bo, empresa.com)" class="flex-grow px-4 py-3 border border-slate-800 bg-slate-950 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50">
+              <button id="exposure-scan-btn" onclick="runExposureCheck()" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold rounded-lg text-sm shadow shadow-cyan-500/10 hover:shadow-cyan-500/20 active:scale-95 transition-all whitespace-nowrap">Analyze Exposure</button>
+            </div>
+            <div class="text-[10px] text-slate-500 mt-2">
+              Busca por dominio (<span class="text-cyan-400 underline cursor-pointer" onclick="setExposureSearchMode('domain'); document.getElementById('exposure-domain-input').value = 'policia.bo'">policia.bo</span>),
+              correo (<span class="text-cyan-400 underline cursor-pointer" onclick="setExposureSearchMode('email'); document.getElementById('exposure-domain-input').value = 'usuario@empresa.com'">usuario@empresa.com</span>)
+              o teléfono. Las contraseñas se muestran parcialmente censuradas.
+            </div>
+          </div>
+
+          <!-- Simulated Console Log Screen -->
+          <div id="exposure-scan-log" class="hidden scanlines p-5 rounded-xl border border-slate-900 bg-slate-950 max-w-4xl max-h-60 overflow-y-auto text-xs text-slate-400 font-mono">
+            <!-- Simulated console rows output here -->
+          </div>
+
+          <!-- Results Summary Card -->
+          <div id="exposure-results" class="hidden space-y-6 max-w-5xl">
+            <!-- KPI stats row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+                <div class="text-[10px] text-slate-500 uppercase font-semibold mb-1">Logins / Credenciales</div>
+                <div id="exp-stat-logins" class="text-2xl font-bold text-cyan-400 font-mono">0</div>
+              </div>
+              <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+                <div class="text-[10px] text-slate-500 uppercase font-semibold mb-1">Bases Filtradas</div>
+                <div id="exp-stat-databases" class="text-2xl font-bold text-purple-400 font-mono">0</div>
+              </div>
+              <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+                <div class="text-[10px] text-slate-500 uppercase font-semibold mb-1">Contraseñas Expuestas</div>
+                <div id="exp-stat-plaintext" class="text-2xl font-bold text-red-400 font-mono">0</div>
+              </div>
+              <div class="glass-card p-4 rounded-xl border border-slate-800/60 text-center">
+                <div class="text-[10px] text-slate-500 uppercase font-semibold mb-1">Total Indexado API</div>
+                <div id="exp-stat-api-total" class="text-2xl font-bold text-slate-200 font-mono">—</div>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Risk Score gauge -->
+              <div class="glass-card p-5 rounded-xl border border-slate-800/60 text-center flex flex-col justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Riesgo de Exposición Real</h4>
+                  <p id="exp-res-domain" class="text-xs text-slate-500 mt-1 font-mono break-all"></p>
+                </div>
+                <div class="py-4">
+                  <div class="flex items-baseline justify-center gap-1">
+                    <div id="exp-res-score" class="text-5xl font-extrabold font-mono">0</div>
+                    <span class="text-xl font-bold text-slate-500">%</span>
+                  </div>
+                  <div id="exp-res-risk-level" class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">—</div>
+                  <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden mt-3 mx-auto max-w-[180px]">
+                    <div id="exp-res-risk-bar" class="h-full bg-cyan-400 transition-all duration-700" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="border-t border-slate-800/50 pt-2">
+                  <span id="exp-res-trend" class="text-xs font-semibold text-red-400">—</span>
+                </div>
+              </div>
+
+              <!-- Real analysis markers -->
+              <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-4">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800/40 pb-2">Indicadores del Análisis</h4>
+                <div class="space-y-3">
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">ÚLTIMA EXPOSICIÓN DETECTADA</span>
+                    <span id="exp-res-lastseen" class="text-xs text-slate-200 font-medium"></span>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">TIPO DE CONSULTA</span>
+                    <span id="exp-res-search-type" class="text-xs text-cyan-400 font-medium"></span>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">FUENTE DE DATOS</span>
+                    <span id="exp-res-data-source" class="text-xs text-slate-200 font-medium"></span>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">REGISTROS MOSTRADOS</span>
+                    <span id="exp-res-shown-count" class="text-xs text-slate-200 font-mono"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sparkline history -->
+              <div class="glass-card p-5 rounded-xl border border-slate-800/60 flex flex-col justify-between">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800/40 pb-2">Trayectoria de Riesgo</h4>
+                <div class="h-28 relative my-2">
+                  <canvas id="chart-exposure-trend"></canvas>
+                </div>
+                <div id="exp-res-chart-caption" class="text-[9px] text-slate-500 text-center font-mono">Basado en volumen y severidad de filtraciones</div>
+              </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+              <h3 class="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-cyan-400"></i>
+                Recomendaciones de Mitigación
+              </h3>
+              <div id="exp-recommendations" class="grid md:grid-cols-3 gap-4">
+                <!-- Dynamic recommendations -->
+              </div>
+            </div>
+
+            <!-- Historical Exposures details -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+              <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                <h3 class="text-sm font-bold text-slate-200">Registros de Filtración (Logins)</h3>
+                <span id="exp-records-badge" class="text-[10px] font-mono px-2 py-1 rounded bg-slate-900 text-cyan-400 border border-slate-800">0 registros</span>
+              </div>
+              <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
+                <table class="min-w-full divide-y divide-slate-800/40">
+                  <thead class="bg-slate-900/40 sticky top-0 z-10">
+                    <tr class="text-[10px] text-slate-400 uppercase tracking-wider">
+                      <th class="px-4 py-2 text-left">Fecha</th>
+                      <th class="px-4 py-2 text-left">Base / Incidente</th>
+                      <th class="px-4 py-2 text-left">Login / Email</th>
+                      <th class="px-4 py-2 text-left">Credencial</th>
+                      <th class="px-4 py-2 text-left">Severidad</th>
+                    </tr>
+                  </thead>
+                  <tbody id="exp-incidents-tbody" class="divide-y divide-slate-800/30">
+                  </tbody>
+                </table>
+              </div>
+              <p id="exp-records-footer" class="text-[10px] text-slate-500 mt-3 font-mono"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             PAGE 5: ADMIN PANEL
+             ============================================== -->
+        <div id="admin-panel-view" class="view-screen space-y-8 hidden">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-white">Analyst Audit & Verification Center</h1>
+            <p class="text-sm text-slate-400 mt-1">Review pending incident logs, inspect machine evidence, and verify threat statuses.</p>
+          </div>
+
+          <!-- Small KPI Cards grid -->
+          <div class="grid grid-cols-4 gap-4">
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60">
+              <div class="text-xs text-slate-500 mb-1">Queue Size</div>
+              <div id="admin-kpi-pending" class="text-xl font-bold text-yellow-500 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60">
+              <div class="text-xs text-slate-500 mb-1">Verified Today</div>
+              <div id="admin-kpi-verified" class="text-xl font-bold text-emerald-500 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60">
+              <div class="text-xs text-slate-500 mb-1">Rejected False Positives</div>
+              <div id="admin-kpi-rejected" class="text-xl font-bold text-red-500 font-mono">0</div>
+            </div>
+            <div class="glass-card p-4 rounded-xl border border-slate-800/60">
+              <div class="text-xs text-slate-500 mb-1">Active Analyst Session</div>
+              <div class="text-xs font-semibold text-slate-300 truncate">Maria Lopez (Lead L3)</div>
+            </div>
+          </div>
+
+          <!-- Split layout: Queue Table + Evidence details auditor -->
+          <div class="grid md:grid-cols-5 gap-6">
+            <!-- Incident selection queue list -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-2 flex flex-col max-h-[500px]">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2 mb-3">Verification Pipeline Feed</h3>
+              <div class="overflow-y-auto flex-grow pr-2">
+                <table class="min-w-full divide-y divide-slate-800/40 text-xs">
+                  <thead>
+                    <tr class="text-[10px] text-slate-400 uppercase">
+                      <th class="px-2 py-2 text-left">ID</th>
+                      <th class="px-2 py-2 text-left">Victim</th>
+                      <th class="px-2 py-2 text-center">Risk</th>
+                      <th class="px-2 py-2 text-center">Confidence</th>
+                      <th class="px-2 py-2 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-queue-tbody">
+                    <!-- Dynamic review list generated from JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Evidence Inspector Pane & Form -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 md:col-span-3 flex flex-col gap-4">
+              <div class="flex justify-between items-center border-b border-slate-800/50 pb-2">
+                <h3 class="text-sm font-bold text-slate-200">Incident Evidence Viewer [ID: <span id="admin-ev-id">TR-XXXX</span>]</h3>
+                <span class="text-[10px] text-slate-400 font-mono">TARGET: <span id="admin-ev-victim">Medix</span></span>
+              </div>
+
+              <!-- Evidence properties summary grid -->
+              <div class="grid grid-cols-3 gap-3 text-xs">
+                <div class="p-2 rounded bg-slate-900 border border-slate-800/50">
+                  <span class="text-[9px] text-slate-500 block">AI RISK RATING</span>
+                  <span id="admin-ev-risk" class="font-bold text-slate-200 font-mono">92/100</span>
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-800/50">
+                  <span class="text-[9px] text-slate-500 block">CONFIDENCE ACCURACY</span>
+                  <span id="admin-ev-conf" class="font-bold text-cyan-400 font-mono">96%</span>
+                </div>
+                <div class="p-2 rounded bg-slate-900 border border-slate-800/50">
+                  <span class="text-[9px] text-slate-500 block">INTELLIGENCE SOURCE</span>
+                  <span id="admin-ev-source" class="font-medium text-slate-300 truncate block">Tor Site</span>
+                </div>
+              </div>
+
+              <!-- AI generated log preview -->
+              <div class="space-y-1">
+                <span class="text-[10px] text-slate-400 font-mono">RAW INTELLIGENCE ARCHIVE EXTRACT:</span>
+                <div class="scanlines p-3 bg-slate-950 rounded border border-slate-900">
+                  <pre id="admin-ev-extracted" class="text-[10px] text-green-400 font-mono overflow-x-auto whitespace-pre-wrap max-h-32"></pre>
+                </div>
+              </div>
+
+              <!-- AI Synthesis Summary block -->
+              <div class="p-3 rounded bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
+                <span class="font-bold text-purple-400 block mb-1">AI Safety Analysis Summary:</span>
+                <span id="admin-ev-summary"></span>
+              </div>
+
+              <!-- Actions Auditor Form -->
+              <form id="admin-verification-form" class="space-y-3 mt-2 border-t border-slate-800/50 pt-4">
+                <div class="space-y-1.5">
+                  <label for="admin-verification-reason" class="text-xs font-bold text-slate-200 block">Audit Action Verification Reason</label>
+                  <textarea id="admin-verification-reason" placeholder="State reason (e.g. valid credentials matching employee databases, obsolete files, etc.)..." rows="2" class="w-full p-2 text-xs border border-slate-800 bg-slate-950 rounded text-slate-300 placeholder-slate-600 focus:outline-none focus:border-cyan-400/50"></textarea>
+                </div>
+
+                <div id="admin-actions-div">
+                  <!-- Dynamic control buttons inject from JS -->
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Audit Log Trail list table -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+            <h3 class="text-sm font-bold text-slate-200 mb-4">Security Auditing Trail Log</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-left">
+                <thead class="bg-slate-900/40">
+                  <tr class="text-[10px] text-slate-400 uppercase">
+                    <th class="px-4 py-2">Timestamp</th>
+                    <th class="px-4 py-2">Analyst</th>
+                    <th class="px-4 py-2">Action</th>
+                    <th class="px-4 py-2">Rationale Description</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-audit-tbody" class="divide-y divide-slate-800/20">
+                  <!-- Dynamic logs sitting here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             PAGE 6: AI SAFETY PAGE VIEW
+             ============================================== -->
+        <div id="ai-safety-view" class="view-screen space-y-8 hidden">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight text-white">AI Safety & Model Transparency Report</h1>
+            <p class="text-sm text-slate-400 mt-1">Explainability index, logic pipelines, hallucination prevention gates, and accuracy indicators.</p>
+          </div>
+
+          <!-- Transparency Metrics -->
+          <div class="grid md:grid-cols-4 gap-6">
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 text-center">
+              <h4 class="text-xs text-slate-400 uppercase font-semibold mb-1">AI Pipeline Accuracy</h4>
+              <div class="text-3xl font-extrabold text-cyan-400 font-mono">99.4%</div>
+              <div class="text-[9px] text-slate-500 mt-1">AUDITED BY HUMAN ANALYSTS</div>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 text-center">
+              <h4 class="text-xs text-slate-400 uppercase font-semibold mb-1">Validation Rate</h4>
+              <div id="safety-verification-rate" class="text-3xl font-extrabold text-purple-400 font-mono">0%</div>
+              <div class="text-[9px] text-slate-500 mt-1">TOTAL RESOLVED CASES</div>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 text-center">
+              <h4 class="text-xs text-slate-400 uppercase font-semibold mb-1">False Positive Index</h4>
+              <div id="safety-false-positive" class="text-3xl font-extrabold text-red-400 font-mono">0%</div>
+              <div class="text-[9px] text-slate-500 mt-1">DISCARDED LEGACY SCHEMAS</div>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 text-center">
+              <h4 class="text-xs text-slate-400 uppercase font-semibold mb-1">Average Model Confidence</h4>
+              <div id="safety-avg-confidence" class="text-3xl font-extrabold text-emerald-400 font-mono">0%</div>
+              <div class="text-[9px] text-slate-500 mt-1">ACROSS INGESTION MATRIX</div>
+            </div>
+          </div>
+
+          <!-- AI Decision Process Pipeline -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800/60">
+            <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2 mb-6">AI Decision Process Pipeline</h3>
+            
+            <div class="grid md:grid-cols-5 gap-4 relative">
+              <div class="p-4 rounded-lg bg-slate-900 border border-slate-800/60 space-y-2 relative group hover:border-cyan-500/50 transition-colors">
+                <span class="text-[9px] font-mono text-cyan-400">STAGE 01</span>
+                <h4 class="text-xs font-bold text-slate-200">OSINT Data Ingestion</h4>
+                <p class="text-[10px] text-slate-400">Aggregates RSS feeds, Tor sites, BreachForums APIs, and Telegram files into raw storage queues.</p>
+              </div>
+
+              <div class="p-4 rounded-lg bg-slate-900 border border-slate-800/60 space-y-2 relative group hover:border-cyan-500/50 transition-colors">
+                <span class="text-[9px] font-mono text-cyan-400">STAGE 02</span>
+                <h4 class="text-xs font-bold text-slate-200">Entity Extraction</h4>
+                <p class="text-[10px] text-slate-400">NLP models analyze texts to identify potential threat actors, victims, and leaked file structures.</p>
+              </div>
+
+              <div class="p-4 rounded-lg bg-slate-900 border border-slate-800/60 space-y-2 relative group hover:border-purple-500/50 transition-colors">
+                <span class="text-[9px] font-mono text-purple-400">STAGE 03</span>
+                <h4 class="text-xs font-bold text-slate-200">Risk Assessment Synthesis</h4>
+                <p class="text-[10px] text-slate-400">Weighs assets priority, credentials authenticity, database schemas, and threat actor rating coefficients.</p>
+              </div>
+
+              <div class="p-4 rounded-lg bg-slate-900 border border-slate-800/60 space-y-2 relative group hover:border-purple-500/50 transition-colors">
+                <span class="text-[9px] font-mono text-purple-400">STAGE 04</span>
+                <h4 class="text-xs font-bold text-slate-200">Anti-Hallucination Gate</h4>
+                <p class="text-[10px] text-slate-400">Zero-temperature schemas perform cryptographic validation of references to ensure records are not fabricated.</p>
+              </div>
+
+              <div class="p-4 rounded-lg bg-slate-900 border border-slate-800/60 space-y-2 relative group hover:border-emerald-500/50 transition-colors">
+                <span class="text-[9px] font-mono text-emerald-400">STAGE 05</span>
+                <h4 class="text-xs font-bold text-slate-200">Human Verification Loop</h4>
+                <p class="text-[10px] text-slate-400">Lead security analysts audit logic maps, select actions, and release mitigation feeds.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explainability weighting factor criteria -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-4">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">AI Risk Factors Weightings</h3>
+              <div class="space-y-3 text-xs">
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Credential Exposure Integrity (Plaintext credentials in dump)</span>
+                    <span class="font-bold text-cyan-400">Weight: 40%</span>
+                  </div>
+                  <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-400" style="width: 40%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Source Authenticity Ratings (Onion repository status logs)</span>
+                    <span class="font-bold text-cyan-400">Weight: 25%</span>
+                  </div>
+                  <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-400" style="width: 25%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Industry Sector Criticality (Govt, Health, Energy index multiplier)</span>
+                    <span class="font-bold text-cyan-400">Weight: 20%</span>
+                  </div>
+                  <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-400" style="width: 20%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Geographical & Geopolitical Scope</span>
+                    <span class="font-bold text-cyan-400">Weight: 15%</span>
+                  </div>
+                  <div class="w-full h-1 bg-slate-900 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-400" style="width: 15%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hallucination safeguards info -->
+            <div class="glass-card p-5 rounded-xl border border-slate-800/60 space-y-4">
+              <h3 class="text-sm font-bold text-slate-200 border-b border-slate-800/50 pb-2">Hallucination Prevention Safeguards</h3>
+              <div class="space-y-3 text-xs text-slate-300">
+                <div class="flex items-start gap-2">
+                  <span class="text-purple-400 font-bold font-mono">></span>
+                  <p><strong class="text-slate-100">RAG Semantic Binding:</strong> Prompts inject target metadata dynamically and prevent models from referencing non-context elements.</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-purple-400 font-bold font-mono">></span>
+                  <p><strong class="text-slate-100">Deterministic Key Validators:</strong> Regular expression parsers and crypto checks process API keys in a sandboxed runtime to prevent dummy keys creation.</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-purple-400 font-bold font-mono">></span>
+                  <p><strong class="text-slate-100">Multi-Modal Ingestion Alignment:</strong> Text claims are cross-checked with file dump dimensions and PNG screenshots to prove matching file counts.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (Compat version for standard script imports) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- Main JavaScript Controller -->
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
