@@ -1,0 +1,35 @@
+---
+description: Unit tests y smoke tests obligatorios según SDD sección 9
+alwaysApply: true
+---
+
+# Testing (SDD v2.1)
+
+## Antes de terminar un cambio con lógica nueva
+1. Añadir o actualizar **unit tests**.
+2. Verificar que **smoke tests** siguen pasando si existen.
+
+## Unit tests — prioridad
+**Backend** (`functions/`, `proxy/`):
+- Validación de inputs y límites.
+- Respuestas OK y errores upstream (502, 404).
+- Headers CORS.
+
+**Frontend** (`app.js`):
+- `calculateRealRiskPercent()`
+- `generateExposureRecommendations()`
+- `parseOsintResponse()`
+- Funciones de censura de credenciales.
+
+Framework sugerido: **Jest** (Node) para backend; **Vitest** o **Jest** para frontend.
+
+## Smoke tests — post-deploy
+1. `index.html` carga sin 4xx/5xx.
+2. `/api/scan`, `/api/breach-check`, `/api/breaches-recent` responden (no 404).
+3. Dashboard renderiza gráficas sin crash.
+
+## Cobertura mínima (MVP)
+- Backend: 70%
+- Frontend: 50%
+
+No marcar tarea como completa si rompiste tests existentes o omitiste tests para lógica nueva.

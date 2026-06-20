@@ -1,0 +1,27 @@
+---
+description: Convenciones del frontend SPA vanilla JS
+globs: app.js,index.html,styles.css
+alwaysApply: false
+---
+
+# Frontend LeakGuard
+
+## Stack
+- Vanilla JS (sin React/Next.js).
+- SPA con `navigateTo(tabId)` y vistas `view-screen`.
+- Chart.js: destruir instancias en `chartInstances` antes de re-renderizar.
+
+## Funciones clave (no romper sin tests)
+- `calculateRealRiskPercent()` — score 0-99 con pesos: logins 35%, DBs 25%, plaintext 30%, hashed 12%.
+- `parseOsintResponse()` — soporta formatos flexibles de la API OSINT.
+- `generateExposureRecommendations()` — prioridades Immediate / 24h / 7d.
+- Censura de credenciales antes de mostrar resultados.
+
+## UI
+- Tema dark cyber: glassmorphism, acentos cyan/purple.
+- Mantener coherencia con `styles.css` existente.
+- No introducir bundlers ni frameworks sin acuerdo explícito.
+
+## Datos
+- Threats mock viven en `app.js`; distinguir demo vs datos reales de API.
+- Firebase Auth con bypass demo `[offline_bypass_mode]` — no eliminar sin reemplazo.

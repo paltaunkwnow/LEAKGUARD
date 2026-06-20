@@ -1,0 +1,21 @@
+---
+description: Cómo actualizar SDD.md, versiones y changelog
+globs: SDD.md,CHANGELOG.md,SDD-plan.md
+alwaysApply: false
+---
+
+# Documentación SDD
+
+## Al modificar `SDD.md`
+1. Bump de versión en el header y tabla "Historial de Versiones".
+2. Entrada nueva en `CHANGELOG.md` (formato semver: Added / Changed / Removed).
+3. Separar **implementado** vs **roadmap** — no documentar como hecho lo que no existe en el repo.
+
+## Referencias
+- `SDD-plan.md` — plan de alineación SDD ↔ código real.
+- Arquitectura implementada: Firebase + vanilla JS + APIs OSINT, no FastAPI/Next.js.
+
+## Filosofía del producto (mantener)
+- Solo metadatos de anuncios públicos; nunca almacenar ni mostrar credenciales/PII filtrados.
+- Transparencia: fuente, confianza OSINT, riesgo explicable.
+- Privacidad en búsquedas (K-Anonymity) es objetivo futuro, no implementado hoy.

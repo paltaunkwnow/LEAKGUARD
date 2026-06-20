@@ -1,0 +1,33 @@
+---
+description: Contexto del proyecto LeakGuard, arquitectura real y convenciones generales
+alwaysApply: true
+---
+
+# LeakGuard — Reglas del proyecto
+
+## Identidad
+- Nombre del producto: **LeakGuard** (no LeakWatch AI).
+- MVP de threat intelligence / verificación de exposición OSINT para hackathon.
+
+## Arquitectura real (fuente de verdad)
+- **Frontend:** SPA vanilla JS (`index.html`, `app.js`, `styles.css`) con Tailwind CDN y Chart.js.
+- **Backend:** Firebase Cloud Functions (`functions/index.js`) y proxy local Express (`proxy/server.js`).
+- **APIs externas:** `leakosintapi.com` (pago, vía `OSINT_TOKEN`) y `xposedornot.com` (gratis).
+- **No implementado aún:** FastAPI, Next.js, Playwright, Tor, Redis, PostgreSQL, K-Anonymity, RAG, WebSockets.
+
+Antes de proponer cambios, contrastar con el código existente. Si el SDD contradice el repo, priorizar el repo y marcar el SDD como roadmap.
+
+## Documentación obligatoria
+- Leer `SDD.md` para visión y requisitos.
+- Leer `SDD-plan.md` para alinear el SDD con la arquitectura real.
+- Actualizar `CHANGELOG.md` cuando cambies `SDD.md`.
+
+## Convenciones de código
+- Cambios mínimos y enfocados; no refactorizar sin pedirlo.
+- Mantener imports al inicio del archivo (sin inline imports).
+- Reutilizar patrones existentes: `renderDashboard()`, proxy CORS, censura de credenciales.
+- No commitear secretos: `.env`, `OSINT_TOKEN`, `config.js`.
+
+## Idioma
+- UI y mensajes de error en español cuando el código ya lo use.
+- Commits y docs del equipo pueden ir en inglés o español según el estilo del repo.

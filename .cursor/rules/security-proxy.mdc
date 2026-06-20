@@ -1,0 +1,27 @@
+---
+description: Seguridad del proxy OSINT — token nunca en el browser
+globs: functions/**/*,proxy/**/*
+alwaysApply: false
+---
+
+# Seguridad del proxy
+
+## Regla crítica
+`OSINT_TOKEN` **nunca** debe exponerse al frontend. Solo vive en:
+- `proxy/.env` (desarrollo)
+- Firebase Secret `OSINT_TOKEN` (producción)
+
+## Patrón obligatorio
+```
+Browser → /api/scan | /api/breach-check | /api/breaches-recent → Proxy/Function → API externa
+```
+
+## Al editar `functions/index.js` o `proxy/server.js`
+- Mantener ambos archivos sincronizados en lógica de proxy.
+- Validar inputs antes de llamar al upstream (`request`, `email`, límites numéricos).
+- Responder con CORS y manejo de errores 4xx/502 sin filtrar tokens.
+- No loguear tokens ni respuestas con credenciales en texto plano.
+
+## Frontend
+- El browser solo envía `{ request, limit, lang }` o `{ email }`.
+- Mostrar credenciales censuradas (`Pa••••rd`, emails parciales, hashes truncados).
