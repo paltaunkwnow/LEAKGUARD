@@ -17,6 +17,14 @@
         "function": "scanProxy"
       },
       {
+        "source": "/api/breach-check",
+        "function": "breachCheckProxy"
+      },
+      {
+        "source": "/api/breaches-recent",
+        "function": "breachesRecentProxy"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

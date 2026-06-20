@@ -1,11 +1,6 @@
 /**
  * Servidor local de desarrollo.
- * Sirve la app estática y el proxy /api/scan (token solo en .env del servidor).
- *
- * Uso:
- *   1. Copia .env.example a .env y coloca OSINT_TOKEN
- *   2. npm install && npm start
- *   3. Abre http://localhost:8787
+ * Sirve la app estática y proxies seguros (tokens solo en .env del servidor).
  */
 const express = require('express');
 const path = require('path');
@@ -16,7 +11,6 @@ const PORT = process.env.PORT || 8787;
 const UPSTREAM = 'https://leakosintapi.com/';
 
 app.use(express.json({ limit: '32kb' }));
-app.use(express.static(path.join(__dirname, '..')));
 
 app.post('/api/scan', async (req, res) => {
   const token = process.env.OSINT_TOKEN;
@@ -57,7 +51,59 @@ app.post('/api/scan', async (req, res) => {
   }
 });
 
+app.post('/api/breach-check', async (req, res) => {
+  const { email } = req.body || {};
+  if (!email || typeof email !== 'string' || !email.includes('@')) {
+    return res.status(400).json({ error: 'Email válido requerido' });
+  }
+
+  const encoded = encodeURIComponent(email.trim());
+
+  try {
+    const [checkRes, analyticsRes] = await Promise.allSettled([
+      fetch(`https://api.xposedornot.com/v1/check-email/${encoded}?details=true`),
+      fetch(`https://api.xposedornot.com/v1/breach-analytics?email=${encoded}`)
+    ]);
+
+    let checkData = null;
+    let analyticsData = null;
+
+    if (checkRes.status === 'fulfilled' && checkRes.value.ok) {
+      checkData = await checkRes.value.json();
+    } else if (checkRes.status === 'fulfilled' && checkRes.value.status === 404) {
+      checkData = { Error: 'Not found', email: email.trim() };
+    }
+
+    if (analyticsRes.status === 'fulfilled' && analyticsRes.value.ok) {
+      analyticsData = await analyticsRes.value.json();
+    }
+
+    return res.json({
+      source: 'xposedornot',
+      check: checkData,
+      analytics: analyticsData
+    });
+  } catch {
+    return res.status(502).json({ error: 'Servicio OSINT gratuito no disponible' });
+  }
+});
+
+app.get('/api/breaches-recent', async (_req, res) => {
+  try {
+    const upstream = await fetch('https://api.xposedornot.com/v1/breaches');
+    if (!upstream.ok) {
+      return res.status(upstream.status).json({ error: 'No se pudo obtener el índice de filtraciones' });
+    }
+    const data = await upstream.json();
+    return res.json({ source: 'xposedornot', breaches: data });
+  } catch {
+    return res.status(502).json({ error: 'Servicio OSINT gratuito no disponible' });
+  }
+});
+
+app.use(express.static(path.join(__dirname, '..')));
+
 app.listen(PORT, () => {
   console.log(`LeakGuard dev server → http://localhost:${PORT}`);
-  console.log('Proxy activo en POST /api/scan (token oculto del navegador)');
+  console.log('Proxy: POST /api/scan · POST /api/breach-check · GET /api/breaches-recent');
 });

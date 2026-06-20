@@ -23,9 +23,21 @@ function initFirebase() {
           if (user) {
             isAuthenticated = true;
             activeAnalyst.name = user.email.split('@')[0];
+            activeAnalyst.email = user.email;
             activeAnalyst.role = "Firebase Verified Analyst";
             activeAnalyst.clearance = "L3 Firebase Admin";
             updateAnalystUI();
+            sessionStorage.setItem('userEmail', user.email);
+
+            const pendingCheck = sessionStorage.getItem('pendingBreachCheck');
+            if (pendingCheck === user.email) {
+              sessionStorage.removeItem('pendingBreachCheck');
+              runAccountBreachAlert(user.email, 'login');
+            } else if (sessionStorage.getItem('breachCheckedSession') !== user.email) {
+              sessionStorage.setItem('breachCheckedSession', user.email);
+              runAccountBreachAlert(user.email, 'session');
+            }
+
             if (currentTab === 'login') {
               navigateTo('dashboard');
             }
@@ -93,10 +105,10 @@ function handleAuthSubmit(event, action) {
   if (firebaseInitialized && authInstance) {
     if (action === 'login') {
       authInstance.signInWithEmailAndPassword(emailInput, passwordInput)
-        .then((userCredential) => {
-          showToast("Autenticación exitosa", "success");
+        .then(() => {
+          sessionStorage.setItem('pendingBreachCheck', emailInput);
+          showToast("Autenticación exitosa — verificando filtraciones...", "success");
           isAuthenticated = true;
-          navigateTo('dashboard');
         })
         .catch((error) => {
           console.error(error);
@@ -104,10 +116,10 @@ function handleAuthSubmit(event, action) {
         });
     } else {
       authInstance.createUserWithEmailAndPassword(emailInput, passwordInput)
-        .then((userCredential) => {
-          showToast("Analista registrado", "success");
+        .then(() => {
+          sessionStorage.setItem('pendingBreachCheck', emailInput);
+          showToast("Cuenta creada — verificando filtraciones de tu correo...", "success");
           isAuthenticated = true;
-          navigateTo('dashboard');
         })
         .catch((error) => {
           console.error(error);
@@ -118,26 +130,27 @@ function handleAuthSubmit(event, action) {
     // Local fallback/mock authentication
     if (action === 'login') {
       if (emailInput && passwordInput.length >= 6) {
-        showToast("Inicio de sesión en modo Demo (Local)", "success");
-        isAuthenticated = true;
-        activeAnalyst.name = emailInput.split('@')[0];
-        activeAnalyst.role = "Demo Analyst";
-        updateAnalystUI();
-        sessionStorage.setItem('demoBypassActive', 'true');
-        navigateTo('dashboard');
+        completeDemoAuth(emailInput, 'login');
       } else {
         showToast("Contraseña debe tener al menos 6 caracteres", "error");
       }
     } else {
-      showToast("Registro en modo Demo (Local) completado", "success");
-      isAuthenticated = true;
-      activeAnalyst.name = emailInput.split('@')[0];
-      activeAnalyst.role = "Demo Analyst";
-      updateAnalystUI();
-      sessionStorage.setItem('demoBypassActive', 'true');
-      navigateTo('dashboard');
+      completeDemoAuth(emailInput, 'register');
     }
   }
+}
+
+async function completeDemoAuth(emailInput, action) {
+  showToast(action === 'register' ? "Registro completado (Demo)" : "Inicio de sesión (Demo)", "success");
+  isAuthenticated = true;
+  activeAnalyst.name = emailInput.split('@')[0];
+  activeAnalyst.email = emailInput;
+  activeAnalyst.role = "Demo Analyst";
+  updateAnalystUI();
+  sessionStorage.setItem('demoBypassActive', 'true');
+  sessionStorage.setItem('userEmail', emailInput);
+  await runAccountBreachAlert(emailInput, action);
+  navigateTo('dashboard');
 }
 
 function checkAuthAndEnter() {
@@ -155,6 +168,9 @@ function handleSignOut() {
         showToast("Sesión cerrada", "info");
         isAuthenticated = false;
         sessionStorage.removeItem('demoBypassActive');
+        sessionStorage.removeItem('breachCheckedSession');
+        sessionStorage.removeItem('pendingBreachCheck');
+        sessionStorage.removeItem('userEmail');
         navigateTo('landing');
       })
       .catch((error) => {
@@ -164,6 +180,9 @@ function handleSignOut() {
     showToast("Sesión cerrada (Modo Demo)", "info");
     isAuthenticated = false;
     sessionStorage.removeItem('demoBypassActive');
+    sessionStorage.removeItem('breachCheckedSession');
+    sessionStorage.removeItem('pendingBreachCheck');
+    sessionStorage.removeItem('userEmail');
     navigateTo('landing');
   }
 }
@@ -499,6 +518,7 @@ let audits = [
 // 3. User Profile and Notifications
 let activeAnalyst = {
   name: "Maria Lopez",
+  email: "",
   role: "Lead Threat Intelligence Analyst",
   clearance: "L3 Admin Access",
   avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop"
@@ -789,6 +809,13 @@ function renderDashboard() {
 
   // Force chart update
   updateCharts();
+  loadRecentBreachesWidget();
+}
+
+async function loadRecentBreachesWidget() {
+  const data = await fetchRecentBreaches();
+  renderRecentBreachesPanel(data);
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function renderThreatDetails() {
@@ -1314,6 +1341,186 @@ function detectSearchType(query) {
   return 'Consulta General';
 }
 
+// ==========================================
+// Account breach alerts & free OSINT (XposedOrNot via proxy)
+// ==========================================
+async function queryFreeBreachApi(email) {
+  const response = await fetch('/api/breach-check', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email.trim() })
+  });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error((data && data.error) || 'Servicio OSINT gratuito no disponible');
+  }
+  return data;
+}
+
+function parseBreachCheckResponse(data) {
+  const result = {
+    exposed: false,
+    breachCount: 0,
+    breaches: [],
+    riskScore: null,
+    email: null,
+    source: 'xposedornot'
+  };
+
+  if (!data || !data.check) return result;
+
+  const check = data.check;
+  if (check.Error === 'Not found' || !check.breaches) {
+    result.email = check.email || null;
+    return result;
+  }
+
+  const flat = Array.isArray(check.breaches[0]) ? check.breaches[0] : check.breaches.flat();
+  result.breaches = flat.filter(Boolean);
+  result.breachCount = result.breaches.length;
+  result.exposed = result.breachCount > 0;
+  result.email = check.email || null;
+
+  if (data.analytics && data.analytics.BreachMetrics) {
+    const metrics = data.analytics.BreachMetrics;
+    if (metrics.risk_score !== undefined) result.riskScore = metrics.risk_score;
+    else if (metrics.risk && metrics.risk[0] !== undefined) result.riskScore = metrics.risk[0];
+  }
+
+  return result;
+}
+
+function pushAccountNotification(text, unread = true, category = 'account-breach') {
+  notifications.unshift({
+    id: Date.now() + Math.random(),
+    text,
+    time: 'Ahora',
+    unread,
+    category
+  });
+  renderNotifications();
+}
+
+async function runAccountBreachAlert(email, context) {
+  if (!email || !email.includes('@')) return;
+
+  try {
+    const raw = await queryFreeBreachApi(email);
+    const parsed = parseBreachCheckResponse(raw);
+    const censored = censorEmail(email);
+    const isRegister = context === 'register';
+
+    if (parsed.exposed) {
+      const sample = parsed.breaches.slice(0, 4).join(', ');
+      const extra = parsed.breachCount > 4 ? ` (+${parsed.breachCount - 4} más)` : '';
+      const riskNote = parsed.riskScore !== null ? ` · Riesgo XON: ${parsed.riskScore}` : '';
+
+      pushAccountNotification(
+        `⚠️ ${isRegister ? 'Bienvenido' : 'Alerta de sesión'}: ${censored} aparece en ${parsed.breachCount} filtración(es) — ${sample}${extra}${riskNote}`,
+        true
+      );
+      showToast(`Tu correo tiene ${parsed.breachCount} filtración(es) conocidas. Revisa notificaciones.`, 'error');
+    } else {
+      pushAccountNotification(
+        `✓ ${isRegister ? 'Registro seguro' : 'Sesión verificada'}: ${censored} no aparece en el índice público XposedOrNot.`,
+        true
+      );
+      showToast('Tu correo no aparece en filtraciones públicas conocidas', 'success');
+    }
+  } catch (err) {
+    pushAccountNotification(
+      `ℹ️ No se pudo verificar filtraciones para ${censorEmail(email)} (${err.message}).`,
+      true
+    );
+  }
+}
+
+function mergeXonIntoExposureRecords(records, stats, xonParsed, email) {
+  if (!xonParsed || !xonParsed.exposed) return { records, stats };
+
+  const existingTitles = new Set(records.map(r => r.title.toLowerCase()));
+  let added = 0;
+
+  xonParsed.breaches.forEach(breachName => {
+    const title = `${breachName} [OSINT Gratuito]`;
+    if (existingTitles.has(title.toLowerCase()) || existingTitles.has(breachName.toLowerCase())) return;
+
+    records.push({
+      date: '—',
+      title,
+      sourceName: breachName,
+      login: censorEmail(email),
+      credentialHtml: '<span class="text-[10px] text-purple-400 font-mono">Índice XposedOrNot</span>',
+      severity: 'High',
+      severityClass: 'text-orange-400',
+      source: 'xposedornot'
+    });
+    added++;
+  });
+
+  if (added > 0) {
+    stats.databasesWithHits = (stats.databasesWithHits || 0) + added;
+    stats.apiTotalResults = (stats.apiTotalResults || records.length - added) + added;
+    stats.totalLogins = (stats.totalLogins || 0) + added;
+    stats.xonBreaches = xonParsed.breachCount;
+  }
+
+  return { records, stats };
+}
+
+async function fetchRecentBreaches() {
+  try {
+    const res = await fetch('/api/breaches-recent');
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+function renderRecentBreachesPanel(data) {
+  const container = document.getElementById('recent-breaches-list');
+  if (!container) return;
+
+  if (!data) {
+    container.innerHTML = '<p class="text-xs text-slate-500">Índice OSINT gratuito no disponible.</p>';
+    return;
+  }
+
+  let list = [];
+  if (Array.isArray(data.breaches)) {
+    list = data.breaches;
+  } else if (Array.isArray(data.breaches?.exposedBreaches)) {
+    list = data.breaches.exposedBreaches;
+  } else if (Array.isArray(data.exposedBreaches)) {
+    list = data.exposedBreaches;
+  }
+
+  list = list
+    .slice()
+    .sort((a, b) => new Date(b.addedDate || b.breachedDate || 0) - new Date(a.addedDate || a.breachedDate || 0))
+    .slice(0, 10);
+
+  if (!list.length) {
+    container.innerHTML = '<p class="text-xs text-slate-500">Sin datos de filtraciones recientes.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(item => {
+    const name = item.breachID || item.breach_name || '—';
+    const year = (item.breachedDate || item.breach_date || '—').slice(0, 10);
+    const records = item.exposedRecords ? `${(item.exposedRecords / 1e6).toFixed(1)}M reg.` : '';
+    return `
+      <div class="flex justify-between items-center gap-2 py-2 border-b border-slate-800/40 text-xs">
+        <div class="min-w-0">
+          <span class="text-slate-300 font-medium block truncate" title="${name}">${name}</span>
+          ${records ? `<span class="text-[10px] text-slate-500">${records}</span>` : ''}
+        </div>
+        <span class="text-slate-500 font-mono whitespace-nowrap">${year}</span>
+      </div>`;
+  }).join('');
+}
+
 async function queryOsintApi(request) {
   const payload = { request: request.trim(), limit: 500, lang: 'es' };
 
@@ -1622,11 +1829,26 @@ async function runExposureCheck() {
   };
 
   try {
-    const apiData = await queryOsintApi(domainInput);
+    const isEmailQuery = searchType === 'Correo Electrónico (Email)' || domainInput.includes('@');
+    const apiPromises = [queryOsintApi(domainInput)];
+    if (isEmailQuery) {
+      apiPromises.push(queryFreeBreachApi(domainInput).catch(() => null));
+    }
+
+    const [apiData, xonRaw] = await Promise.all(apiPromises);
     const parsed = parseOsintResponse(apiData);
     records = parsed.records;
     stats = parsed.stats;
     stats.fromApi = true;
+
+    if (xonRaw) {
+      const xonParsed = parseBreachCheckResponse(xonRaw);
+      const merged = mergeXonIntoExposureRecords(records, stats, xonParsed, domainInput);
+      records = merged.records;
+      stats = merged.stats;
+      appendExposureLog(logConsole, `[+] OSINT gratuito (XposedOrNot): ${xonParsed.breachCount} filtración(es) adicionales.`);
+    }
+
     const total = stats.apiTotalResults ?? records.length;
     appendExposureLog(logConsole, `[+] Índice: ${total} resultado(s) · ${stats.databasesWithHits} base(s) · ${records.length} registro(s) parseados.`);
   } catch (err) {
@@ -1667,7 +1889,7 @@ async function runExposureCheck() {
     : 'Sin filtraciones detectadas';
 
   document.getElementById('exp-res-search-type').innerText = searchType;
-  document.getElementById('exp-res-data-source').innerText = 'Motor de indexación OSINT (proxy seguro)';
+  document.getElementById('exp-res-data-source').innerText = 'Motor OSINT + XposedOrNot (gratuito)';
   document.getElementById('exp-res-shown-count').innerText =
     `${records.length} registro(s) mostrados · total índice: ${totalLogins}`;
 
@@ -1748,7 +1970,8 @@ function renderNotifications() {
   wrapper.innerHTML = "";
   notifications.forEach(n => {
     const item = document.createElement('div');
-    item.className = `p-3 text-xs border-b border-slate-800/40 hover:bg-slate-800/40 transition-colors ${n.unread ? 'bg-slate-900/30' : ''}`;
+    const isBreach = n.category === 'account-breach';
+    item.className = `p-3 text-xs border-b border-slate-800/40 hover:bg-slate-800/40 transition-colors cursor-pointer ${n.unread ? 'bg-slate-900/30' : ''} ${isBreach && n.text.startsWith('⚠️') ? 'border-l-2 border-red-500/60' : isBreach ? 'border-l-2 border-emerald-500/40' : ''}`;
     item.innerHTML = `
       <div class="flex justify-between items-start mb-1">
         <span class="font-medium text-slate-200">${n.text}</span>

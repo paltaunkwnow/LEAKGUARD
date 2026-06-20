@@ -535,6 +535,21 @@
               </div>
             </div>
           </div>
+
+          <!-- Recent public breaches (XposedOrNot free OSINT) -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800/60">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                <i data-lucide="database" class="w-4 h-4 text-purple-400"></i>
+                Filtraciones Públicas Recientes
+              </h3>
+              <span class="text-[10px] font-mono text-purple-400 border border-purple-900/50 px-2 py-0.5 rounded bg-purple-950/30">OSINT GRATUITO</span>
+            </div>
+            <p class="text-[10px] text-slate-500 mb-3">Índice XposedOrNot — complemento gratuito para detectar leaks actualizados.</p>
+            <div id="recent-breaches-list" class="max-h-48 overflow-y-auto">
+              <p class="text-xs text-slate-500">Cargando índice...</p>
+            </div>
+          </div>
         </div>
 
         <!-- ==============================================
@@ -727,7 +742,7 @@
             <div class="text-[10px] text-slate-500 mt-2">
               Busca por dominio (<span class="text-cyan-400 underline cursor-pointer" onclick="setExposureSearchMode('domain'); document.getElementById('exposure-domain-input').value = 'policia.bo'">policia.bo</span>),
               correo (<span class="text-cyan-400 underline cursor-pointer" onclick="setExposureSearchMode('email'); document.getElementById('exposure-domain-input').value = 'usuario@empresa.com'">usuario@empresa.com</span>)
-              o teléfono. Las contraseñas se muestran parcialmente censuradas.
+              o teléfono. Las contraseñas se muestran parcialmente censuradas. Para correos se combina el motor principal + <span class="text-purple-400">XposedOrNot (OSINT gratuito)</span>.
             </div>
           </div>
 
