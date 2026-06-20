@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.1.0] - 2026-06-20
+
+### Changed (SDD)
+
+- SDD.md v3.1: reescrito con estado honesto por módulo (✅ / ⚠️ / 🔜)
+- Separación clara entre implementado, parcial y roadmap
+- Módulos 9–11 documentados (auth, admin, AI safety)
+- Tabla API REST completa y roadmap por fases
+- Corregidas afirmaciones incorrectas (K-Anonymity, Tor, OTX, WebSockets marcados como roadmap)
+
+---
+
 ## [3.0.0] - 2026-06-20
 
 ### Added — Stack v2 (migración completa)
