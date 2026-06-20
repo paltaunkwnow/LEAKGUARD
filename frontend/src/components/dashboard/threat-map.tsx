@@ -19,9 +19,11 @@ function MapInner({ geo }: Props) {
   useEffect(() => setMounted(true), []);
   if (!mounted) return <div className="h-64 bg-slate-900 rounded-lg animate-pulse" />;
 
+  /* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
   const L = require("leaflet");
   const { MapContainer, TileLayer, CircleMarker, Popup } = require("react-leaflet");
   require("leaflet/dist/leaflet.css");
+  /* eslint-enable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
 
   return (
     <MapContainer center={[20, 0]} zoom={2} className="h-64 w-full rounded-lg z-0">
