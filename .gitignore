@@ -1,0 +1,5 @@
+.env
+aegis.db
+__pycache__/
+*.pyc
+downloaded.html
