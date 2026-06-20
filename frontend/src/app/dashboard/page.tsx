@@ -117,7 +117,7 @@ export default function DashboardPage() {
               {!consulted.length && <p className="text-slate-500">Sin consultas aún.</p>}
               {consulted.map((s, i) => (
                 <div key={i} className="flex justify-between border-b border-slate-800/40 py-2">
-                  <span className="truncate">{s.query}</span>
+                  <span className="truncate">{s.searchType}</span>
                   <span className="font-mono text-cyan-400">{s.riskScore}%</span>
                 </div>
               ))}

@@ -1,4 +1,18 @@
-const API_BASE = typeof window !== "undefined" ? "" : process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+/** Browser: use NEXT_PUBLIC_API_URL when set (Docker/direct); else relative URL for Next rewrites. */
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
+  (typeof window !== "undefined" ? "" : "http://localhost:8000");
+
+function parseApiError(data: unknown, status: number): string {
+  const body = data as { detail?: string | Array<{ msg?: string }>; error?: string };
+  if (typeof body.detail === "string") return body.detail;
+  if (Array.isArray(body.detail)) {
+    const msgs = body.detail.map((e) => e.msg).filter(Boolean);
+    if (msgs.length) return msgs.join("; ");
+  }
+  if (body.error) return body.error;
+  return `Error ${status}`;
+}
 
 function authHeaders(): HeadersInit {
   if (typeof window === "undefined") return { "Content-Type": "application/json" };
@@ -15,7 +29,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { ...authHeaders(), ...init?.headers },
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((data as { detail?: string; error?: string }).detail || (data as { error?: string }).error || `Error ${res.status}`);
+  if (!res.ok) throw new Error(parseApiError(data, res.status));
   return data as T;
 }
 
