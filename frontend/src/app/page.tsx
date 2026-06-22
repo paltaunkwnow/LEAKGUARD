@@ -497,15 +497,45 @@ export default function LandingPage() {
         </div>
 
         {/* Contributors Section */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-4 mb-4 text-xs text-slate-400">
-          <span className="text-slate-500 flex items-center gap-1"><Github className="w-3.5 h-3.5 text-slate-400" /> Contributors:</span>
-          <a href="https://github.com/paltaunkwnow" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">@paltaunkwnow</a>
-          <span className="text-slate-700 font-bold">•</span>
-          <a href="https://github.com/emilio-garcia-ie" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">@emilio-garcia-ie</a>
-          <span className="text-slate-700 font-bold">•</span>
-          <a href="https://github.com/invertilo" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">@invertilo</a>
-          <span className="text-slate-700 font-bold">•</span>
-          <a href="https://github.com/fernandocastedo" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">@fernandocastedo</a>
+        <div className="flex flex-col items-center gap-3 mt-6 mb-4">
+          <span className="text-slate-500 flex items-center gap-1.5 text-xs">
+            <Github className="w-3.5 h-3.5 text-slate-400" /> Contributors
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-5">
+            {[
+              { user: 'paltaunkwnow' },
+              { user: 'emilio-garcia-ie' },
+              { user: 'invertilo' },
+              { user: 'fernandocastedo' },
+            ].map(({ user }) => (
+              <a
+                key={user}
+                href={`https://github.com/${user}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-1.5 group"
+              >
+                <img
+                  src={`https://github.com/${user}.png?size=64`}
+                  alt={user}
+                  width={44}
+                  height={44}
+                  style={{ borderRadius: '50%', border: '2px solid rgba(0,245,255,0.25)', transition: 'border-color 0.2s, transform 0.2s' }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLImageElement).style.borderColor = 'rgba(0,245,255,0.8)';
+                    (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLImageElement).style.borderColor = 'rgba(0,245,255,0.25)';
+                    (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)';
+                  }}
+                />
+                <span className="text-xs text-slate-500 group-hover:text-cyan-400 transition-colors">
+                  @{user}
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
 
         <p className="text-slate-600 text-xs">

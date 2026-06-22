@@ -202,27 +202,35 @@ LeakGuard opera bajo los principios legales de **plataforma intermediaria** conf
 
 ## 👥 Contribuidores
 
-<p align="center">
-  <a href="https://github.com/paltaunkwnow">
-    <img src="https://github.com/paltaunkwnow.png" width="60" style="border-radius:50%" alt="paltaunkwnow"/>
-  </a>&nbsp;&nbsp;
-  <a href="https://github.com/emilio-garcia-ie">
-    <img src="https://github.com/emilio-garcia-ie.png" width="60" style="border-radius:50%" alt="emilio-garcia-ie"/>
-  </a>&nbsp;&nbsp;
-  <a href="https://github.com/invertilo">
-    <img src="https://github.com/invertilo.png" width="60" style="border-radius:50%" alt="invertilo"/>
-  </a>&nbsp;&nbsp;
-  <a href="https://github.com/fernandocastedo">
-    <img src="https://github.com/fernandocastedo.png" width="60" style="border-radius:50%" alt="fernandocastedo"/>
-  </a>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/paltaunkwnow">
+        <img src="https://avatars.githubusercontent.com/paltaunkwnow?v=4&s=80" width="80" style="border-radius:50%" alt="paltaunkwnow"/><br/>
+        <sub><b>@paltaunkwnow</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/emilio-garcia-ie">
+        <img src="https://avatars.githubusercontent.com/emilio-garcia-ie?v=4&s=80" width="80" style="border-radius:50%" alt="emilio-garcia-ie"/><br/>
+        <sub><b>@emilio-garcia-ie</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/invertilo">
+        <img src="https://avatars.githubusercontent.com/invertilo?v=4&s=80" width="80" style="border-radius:50%" alt="invertilo"/><br/>
+        <sub><b>@invertilo</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/fernandocastedo">
+        <img src="https://avatars.githubusercontent.com/fernandocastedo?v=4&s=80" width="80" style="border-radius:50%" alt="fernandocastedo"/><br/>
+        <sub><b>@fernandocastedo</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <a href="https://github.com/paltaunkwnow"><b>@paltaunkwnow</b></a> &nbsp;·&nbsp;
-  <a href="https://github.com/emilio-garcia-ie"><b>@emilio-garcia-ie</b></a> &nbsp;·&nbsp;
-  <a href="https://github.com/invertilo"><b>@invertilo</b></a> &nbsp;·&nbsp;
-  <a href="https://github.com/fernandocastedo"><b>@fernandocastedo</b></a>
-</p>
 
 ---
 
