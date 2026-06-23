@@ -289,7 +289,7 @@ export default function LandingPage() {
             <LangSwitcher />
             <Link
               href="/login"
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-semibold hover:opacity-90 transition-all shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
+              className="px-4 py-2 rounded-lg bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 text-sm font-semibold hover:bg-cyan-400/25 hover:border-cyan-400/50 transition-all backdrop-blur"
             >
               {t.landing_login_btn}
             </Link>
@@ -321,7 +321,7 @@ export default function LandingPage() {
         <div className="flex gap-4 justify-center flex-wrap">
           <Link
             href="/login"
-            className="group px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold text-base hover:opacity-90 transition-all shadow-2xl shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-105 flex items-center gap-2"
+            className="group px-8 py-4 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 font-bold text-base hover:bg-cyan-400/25 hover:border-cyan-400/50 hover:text-white transition-all hover:scale-105 backdrop-blur flex items-center gap-2"
           >
             <Eye className="w-5 h-5" />
             {t.landing_access_btn}
@@ -468,7 +468,7 @@ export default function LandingPage() {
             <div className="flex gap-4 justify-center flex-wrap relative z-10">
               <Link
                 href="/login"
-                className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold hover:opacity-90 hover:scale-105 transition-all shadow-2xl shadow-cyan-500/30"
+                className="px-8 py-4 rounded-xl bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 font-bold hover:bg-cyan-400/25 hover:border-cyan-400/50 hover:text-white hover:scale-105 transition-all backdrop-blur"
               >
                 {t.landing_access_btn}
               </Link>

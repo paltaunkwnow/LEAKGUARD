@@ -222,7 +222,7 @@ export default function LoginPage() {
               </Button>
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white"
+                className="bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 hover:bg-cyan-400/25 hover:border-cyan-400/50 hover:text-white transition-all"
                 onClick={() => {
                   setAcceptedTerms(true);
                   setShowTermsModal(false);
