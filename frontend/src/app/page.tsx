@@ -12,6 +12,12 @@ import {
 } from "lucide-react";
 import { useLang, LANG_META, Lang } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+const ShapeBlur = dynamic(() => import("@/components/ui/shape-blur"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full" />,
+});
 
 /* ─── Animated Canvas Background ─────────────────────────────── */
 function CyberCanvas() {
@@ -335,8 +341,18 @@ export default function LandingPage() {
           </Link>
         </div>
 
-        {/* Glow orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-radial from-cyan-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        {/* ShapeBlur interactive background (ReactBits) */}
+        <div className="absolute inset-0 pointer-events-none opacity-20" style={{ zIndex: 0 }}>
+          <ShapeBlur
+            className="w-full h-full"
+            variation={0}
+            shapeSize={1.2}
+            roundness={0.4}
+            borderSize={0.05}
+            circleSize={0.3}
+            circleEdge={0.5}
+          />
+        </div>
       </section>
 
       {/* ── Stats Bar ── */}
