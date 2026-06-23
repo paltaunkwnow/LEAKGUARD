@@ -1,19 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #040B14;
-  --foreground: #e2e8f0;
-  --card: #0d1526;
-  --card-border: #1a2740;
-  --border: #1e2d40;
-  --primary: #00F5FF;
-  --primary-dark: #0891b2;
-  --muted: #64748b;
-  --accent: #7C3AED;
+  --background: #000000;
+  --foreground: #f5f5f5;
+  --card: #0a0a0a;
+  --card-border: #1a1a1a;
+  --border: #222222;
+  --primary: #ff5722;
+  --primary-hover: #ff6b3d;
+  --primary-dark: #e64a19;
+  --muted: #737373;
+  --accent: #ff5722;
+  --surface: #111111;
+  --surface-elevated: #161616;
 }
 
 * {
@@ -32,17 +35,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.font-mono-brand {
+  font-family: 'Fragment Mono', ui-monospace, monospace;
+}
+
 /* Leaflet map */
 .leaflet-container {
-  background: #0d1526 !important;
-  border-radius: 0.5rem;
+  background: #0a0a0a !important;
+  border-radius: 0.75rem;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 10px !important;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+  background: #111111 !important;
+  border: 1px solid #222222 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8) !important;
   padding: 0 !important;
 }
 
@@ -51,38 +58,36 @@ body {
 }
 
 .leaflet-popup-tip {
-  background: #0f172a !important;
+  background: #111111 !important;
 }
 
 .leaflet-popup-close-button {
-  color: #64748b !important;
+  color: #737373 !important;
   font-size: 16px !important;
   padding: 6px 8px !important;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d1526;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e2d40;
+  background: #333333;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F5FF40;
+  background: #ff572240;
 }
 
-/* Select appearance */
 select option {
-  background: #0d1526;
-  color: #e2e8f0;
+  background: #111111;
+  color: #f5f5f5;
 }
 
 @layer utilities {
@@ -99,13 +104,52 @@ select option {
   }
 
   .glass {
-    background: rgba(13, 21, 38, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .agentory-glow {
+    box-shadow: 0 0 80px rgba(255, 87, 34, 0.15);
+  }
+
+  .agentory-ring {
+    background: radial-gradient(ellipse at center, rgba(255, 87, 34, 0.12) 0%, transparent 70%);
   }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes globePulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-globe-pulse {
+  animation: globePulse 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-orbit-spin {
+  animation: orbitSpin 28s linear infinite;
+}
+
+.animate-orbit-spin-reverse {
+  animation: orbitSpin 22s linear infinite reverse;
 }

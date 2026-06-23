@@ -379,9 +379,9 @@ export default function OSINTResourcesPage() {
       case "breach_engines":
         return {
           icon: Database,
-          badgeColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+          badgeColor: "bg-[#ff5722]/10 text-[#ff5722] border-[#ff5722]/20",
           glowColor: "group-hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]",
-          borderHover: "group-hover:border-cyan-500/50"
+          borderHover: "group-hover:border-[#ff5722]/50"
         };
       case "threat_actors":
         return {
@@ -411,8 +411,8 @@ export default function OSINTResourcesPage() {
     <ProtectedRoute>
       <AppShell>
         {/* Header section with gradient background highlight */}
-        <div className="relative mb-8 p-6 sm:p-8 rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden">
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-radial from-cyan-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="relative mb-8 p-6 sm:p-8 rounded-2xl border border-white/8 bg-[#111]/40 overflow-hidden">
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-radial from-[#ff5722]/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-4">
               <Sparkles className="w-3.5 h-3.5" /> OSINT Hub
@@ -420,7 +420,7 @@ export default function OSINTResourcesPage() {
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">
               {t.resources_title}
             </h1>
-            <p className="text-slate-400 text-sm max-w-2xl leading-relaxed">
+            <p className="text-neutral-400 text-sm max-w-2xl leading-relaxed">
               {t.resources_subtitle}
             </p>
           </div>
@@ -434,15 +434,15 @@ export default function OSINTResourcesPage() {
               placeholder={t.resources_search_placeholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 border-slate-800 bg-slate-900/60 focus:border-cyan-500 focus:ring-cyan-500/20"
+              className="pl-10 h-10 border-white/8 bg-[#111]/60 focus:border-[#ff5722] focus:ring-[#ff5722]/20"
             />
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500">
               <Search className="w-4 h-4" />
             </div>
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-950/40 border border-slate-900 rounded-xl overflow-x-auto whitespace-nowrap">
+          <div className="flex flex-wrap gap-1.5 p-1 bg-[#0a0a0a]/40 border border-white/8 rounded-xl overflow-x-auto whitespace-nowrap">
             {categories.map((cat) => {
               const Icon = cat.icon;
               const active = selectedCategory === cat.id;
@@ -453,15 +453,15 @@ export default function OSINTResourcesPage() {
                   className={cn(
                     "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
                     active
-                      ? "bg-slate-800 text-white shadow-lg shadow-black/20"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                      ? "bg-[#1a1a1a] text-white shadow-lg shadow-black/20"
+                      : "text-neutral-400 hover:text-neutral-200 hover:bg-white/5"
                   )}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   <span>{cat.label}</span>
                   <span className={cn(
                     "text-[10px] px-1.5 py-0.2 rounded-full font-mono",
-                    active ? "bg-slate-700 text-slate-300" : "bg-slate-900 text-slate-500"
+                    active ? "bg-[#222] text-neutral-300" : "bg-[#111] text-neutral-500"
                   )}>
                     {cat.count}
                   </span>
@@ -473,18 +473,18 @@ export default function OSINTResourcesPage() {
 
         {/* Category Description Banner */}
         {getCategoryHeaderDesc() && (
-          <div className="mb-6 flex gap-3 p-4 rounded-xl border border-slate-800 bg-slate-900/20 text-slate-400 text-xs items-start leading-relaxed animate-fade-in">
-            <Info className="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5" />
+          <div className="mb-6 flex gap-3 p-4 rounded-xl border border-white/8 bg-[#111]/20 text-neutral-400 text-xs items-start leading-relaxed animate-fade-in">
+            <Info className="w-4.5 h-4.5 text-[#ff5722] shrink-0 mt-0.5" />
             <p>{getCategoryHeaderDesc()}</p>
           </div>
         )}
 
         {/* Grid layout for resources */}
         {filteredResources.length === 0 ? (
-          <div className="text-center py-20 border border-dashed border-slate-800 rounded-2xl bg-slate-900/10">
-            <Database className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 text-sm font-semibold">{t.no_resources_found}</p>
-            <p className="text-slate-600 text-xs mt-1">Try tweaking your search or category filter</p>
+          <div className="text-center py-20 border border-dashed border-white/8 rounded-2xl bg-[#111]/10">
+            <Database className="w-10 h-10 text-neutral-600 mx-auto mb-3" />
+            <p className="text-neutral-400 text-sm font-semibold">{t.no_resources_found}</p>
+            <p className="text-neutral-600 text-xs mt-1">Try tweaking your search or category filter</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -495,7 +495,7 @@ export default function OSINTResourcesPage() {
                 <div
                   key={res.id}
                   className={cn(
-                    "group flex flex-col justify-between p-5 rounded-xl border border-slate-800 bg-slate-900/40 backdrop-blur transition-all duration-300 hover:bg-slate-800/20 hover:-translate-y-1 shadow-lg shadow-black/10",
+                    "group flex flex-col justify-between p-5 rounded-xl border border-white/8 bg-[#111]/40 backdrop-blur transition-all duration-300 hover:bg-white/5/20 hover:-translate-y-1 shadow-lg shadow-black/10",
                     styles.borderHover,
                     styles.glowColor
                   )}
@@ -506,14 +506,14 @@ export default function OSINTResourcesPage() {
                       <span className={cn("text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border leading-none", styles.badgeColor)}>
                         {res.category === "breach_engines" ? t.category_breach_engines : res.category === "threat_actors" ? t.category_threat_actors : t.category_threat_maps}
                       </span>
-                      <CategoryIcon className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-400 transition-colors" />
+                      <CategoryIcon className="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors" />
                     </div>
 
                     {/* Content: Title + Description */}
-                    <h3 className="font-extrabold text-white text-base mb-2 group-hover:text-cyan-400 transition-colors">
+                    <h3 className="font-extrabold text-white text-base mb-2 group-hover:text-[#ff5722] transition-colors">
                       {res.name}
                     </h3>
-                    <p className="text-slate-400 text-xs leading-relaxed mb-4">
+                    <p className="text-neutral-400 text-xs leading-relaxed mb-4">
                       {res.desc}
                     </p>
                   </div>
@@ -524,7 +524,7 @@ export default function OSINTResourcesPage() {
                       {res.tags.map((tag) => (
                         <Badge
                           key={tag}
-                          className="bg-slate-950 text-slate-500 hover:text-slate-400 border border-slate-900/60 text-[9px] font-mono leading-none py-0.5 px-1.5"
+                          className="bg-[#0a0a0a] text-neutral-500 hover:text-neutral-400 border border-white/8/60 text-[9px] font-mono leading-none py-0.5 px-1.5"
                         >
                           #{tag}
                         </Badge>
@@ -536,7 +536,7 @@ export default function OSINTResourcesPage() {
                       href={res.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-all border-t border-slate-800/80 w-full pt-3"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#ff5722] group-hover:text-orange-300 transition-all border-t border-white/8/80 w-full pt-3"
                     >
                       <span>Launch Link</span>
                       <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

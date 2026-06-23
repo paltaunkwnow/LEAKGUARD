@@ -19,10 +19,10 @@ import { cn } from "@/lib/utils";
 /* ─── KPI Card ─────────────────────────────────────────────────── */
 function Kpi({ label, value, icon: Icon, color }: { label: string; value: number | string; icon: React.ElementType; color: string }) {
   return (
-    <Card className="relative overflow-hidden group hover:border-slate-700 transition-colors">
+    <Card className="relative overflow-hidden group hover:border-white/10 transition-colors">
       <CardContent className="pt-5 pb-4">
         <div className={cn("text-2xl font-black font-mono mb-1", color)}>{value}</div>
-        <div className="text-xs text-slate-500 leading-tight">{label}</div>
+        <div className="text-xs text-neutral-500 leading-tight">{label}</div>
         <div className={cn("absolute top-3 right-3 opacity-10 group-hover:opacity-20 transition-opacity", color)}>
           <Icon className="w-10 h-10" />
         </div>
@@ -48,14 +48,14 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none pl-3 pr-8 py-2 rounded-lg border border-slate-700 bg-slate-900 text-slate-200 text-sm focus:outline-none focus:border-cyan-500 hover:border-slate-600 transition-colors cursor-pointer"
+        className="appearance-none pl-3 pr-8 py-2 rounded-xl border border-white/10 bg-[#111] text-neutral-200 text-sm focus:outline-none focus:border-[#ff5722] hover:border-white/20 transition-colors cursor-pointer"
       >
         <option value="">{label}</option>
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
-      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-500 pointer-events-none" />
     </div>
   );
 }
@@ -69,18 +69,18 @@ function Pagination({
 }) {
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-t border-slate-800 text-xs">
-      <span className="text-slate-500 font-mono">{pageLabel} {page} {ofLabel} {totalPages}</span>
+    <div className="flex items-center justify-between px-4 py-3 border-t border-white/8 text-xs">
+      <span className="text-neutral-500 font-mono">{pageLabel} {page} {ofLabel} {totalPages}</span>
       <div className="flex gap-1.5">
         <button
           disabled={page === 1}
           onClick={() => onChange(page - 1)}
-          className="px-3 py-1.5 rounded-md border border-slate-700 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors text-xs"
+          className="px-3 py-1.5 rounded-md border border-white/10 hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed text-neutral-300 transition-colors text-xs"
         >{prevLabel}</button>
         <button
           disabled={page === totalPages}
           onClick={() => onChange(page + 1)}
-          className="px-3 py-1.5 rounded-md border border-slate-700 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors text-xs"
+          className="px-3 py-1.5 rounded-md border border-white/10 hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed text-neutral-300 transition-colors text-xs"
         >{nextLabel}</button>
       </div>
     </div>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
   const kpiCards = kpis ? [
     { label: t.kpi_threats_today, value: kpis.threatsToday, icon: AlertTriangle, color: "text-rose-400" },
     { label: t.kpi_critical, value: kpis.critical, icon: Shield, color: "text-orange-400" },
-    { label: t.kpi_verified, value: kpis.verified, icon: TrendingUp, color: "text-cyan-400" },
+    { label: t.kpi_verified, value: kpis.verified, icon: TrendingUp, color: "text-[#ff5722]" },
     { label: t.kpi_pending, value: kpis.pending, icon: Activity, color: "text-yellow-400" },
     { label: t.kpi_actors, value: kpis.actors, icon: Users, color: "text-purple-400" },
     { label: t.kpi_sectors, value: kpis.sectors, icon: Globe, color: "text-teal-400" },
@@ -265,7 +265,7 @@ export default function DashboardPage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
               </span>
               {countryFilter && (
-                <span className="ml-2 text-xs text-cyan-400 font-mono">
+                <span className="ml-2 text-xs text-[#ff5722] font-mono">
                   {countryFlag(countryFilter)} {countryFilter}
                 </span>
               )}
@@ -281,11 +281,11 @@ export default function DashboardPage() {
           <CardHeader className="pb-3">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Activity className="w-4 h-4 text-cyan-400" />
+                <Activity className="w-4 h-4 text-[#ff5722]" />
                 {t.feed_title}
               </CardTitle>
               <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
-                <Filter className="w-3.5 h-3.5 text-slate-500" />
+                <Filter className="w-3.5 h-3.5 text-neutral-500" />
                 <FilterSelect
                   label={t.all_countries}
                   value={countryFilter}
@@ -307,7 +307,7 @@ export default function DashboardPage() {
                 {hasFilters && (
                   <button
                     onClick={clearFilters}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs transition-colors"
+                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 text-neutral-400 hover:text-neutral-200 text-xs transition-colors"
                   >
                     <X className="w-3 h-3" /> {t.clear_filters}
                   </button>
@@ -315,7 +315,7 @@ export default function DashboardPage() {
               </div>
             </div>
             {hasFilters && (
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-neutral-500 mt-2">
                 {filtered.length} {t.results_count}
               </p>
             )}
@@ -323,7 +323,7 @@ export default function DashboardPage() {
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[700px]">
-                <thead className="text-slate-500 border-b border-slate-800 bg-slate-900/50">
+                <thead className="text-neutral-500 border-b border-white/8 bg-[#111]/50">
                   <tr>
                     {[t.col_date, t.col_actor, t.col_victim, t.col_country, t.col_sector, t.col_risk, t.col_status, t.col_verif].map((h) => (
                       <th key={h} className="px-4 py-3 text-left text-xs font-semibold tracking-wide">{h}</th>
@@ -333,25 +333,25 @@ export default function DashboardPage() {
                 <tbody>
                   {pagedThreats.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="text-center py-10 text-slate-500 text-sm">
+                      <td colSpan={8} className="text-center py-10 text-neutral-500 text-sm">
                         {t.no_results_filter}
                       </td>
                     </tr>
                   ) : (
                     pagedThreats.map((threat) => (
-                      <tr key={threat.id} className="border-b border-slate-800/50 hover:bg-slate-900/60 transition-colors">
-                        <td className="px-4 py-3 font-mono text-slate-400 text-xs whitespace-nowrap">{threat.date}</td>
+                      <tr key={threat.id} className="border-b border-white/8 hover:bg-[#111]/60 transition-colors">
+                        <td className="px-4 py-3 font-mono text-neutral-400 text-xs whitespace-nowrap">{threat.date}</td>
                         <td className="px-4 py-3">
-                          <Link href={`/threats/${threat.id}`} className="text-cyan-400 hover:underline font-semibold text-sm">{threat.actor}</Link>
+                          <Link href={`/threats/${threat.id}`} className="text-[#ff5722] hover:underline font-semibold text-sm">{threat.actor}</Link>
                         </td>
-                        <td className="px-4 py-3 text-slate-300 text-sm">{threat.victim}</td>
+                        <td className="px-4 py-3 text-neutral-300 text-sm">{threat.victim}</td>
                         <td className="px-4 py-3 text-sm whitespace-nowrap">
                           <span className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-extrabold font-mono tracking-wider text-cyan-400 bg-cyan-950/40 px-1.5 py-0.5 rounded border border-cyan-800/30 leading-none">{countryFlag(threat.country)}</span>
-                            <span className="text-slate-400">{threat.country}</span>
+                            <span className="text-[10px] font-extrabold font-mono tracking-wider text-[#ff5722] bg-[#ff5722]/10 px-1.5 py-0.5 rounded border border-[#ff5722]/20 leading-none">{countryFlag(threat.country)}</span>
+                            <span className="text-neutral-400">{threat.country}</span>
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-slate-400 text-xs">{threat.sector}</td>
+                        <td className="px-4 py-3 text-neutral-400 text-xs">{threat.sector}</td>
                         <td className="px-4 py-3 text-center">
                           <span className={cn(
                             "inline-flex items-center gap-1 font-mono font-bold text-sm",
@@ -404,7 +404,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="p-0">
               <table className="w-full text-xs">
-                <thead className="text-slate-500 border-b border-slate-800 bg-slate-900/30">
+                <thead className="text-neutral-500 border-b border-white/8 bg-[#111]/30">
                   <tr>
                     {[t.col_thread, t.col_author, t.col_replies].map((h) => (
                       <th key={h} className="px-3 py-2.5 text-left font-medium">{h}</th>
@@ -413,13 +413,13 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {!cracked.length && (
-                    <tr><td colSpan={3} className="text-center py-6 text-slate-500">{t.loading_threads}</td></tr>
+                    <tr><td colSpan={3} className="text-center py-6 text-neutral-500">{t.loading_threads}</td></tr>
                   )}
                   {pagedCracked.map((item, i) => (
-                    <tr key={i} className="border-b border-slate-800/50 hover:bg-slate-900/60">
-                      <td className="px-3 py-2.5 text-cyan-400 font-semibold truncate max-w-[180px]" title={item.title}>{item.title}</td>
-                      <td className="px-3 py-2.5 text-slate-400 font-mono">{item.author}</td>
-                      <td className="px-3 py-2.5 text-slate-500 font-mono text-center">{item.replies}</td>
+                    <tr key={i} className="border-b border-white/8 hover:bg-[#111]/60">
+                      <td className="px-3 py-2.5 text-[#ff5722] font-semibold truncate max-w-[180px]" title={item.title}>{item.title}</td>
+                      <td className="px-3 py-2.5 text-neutral-400 font-mono">{item.author}</td>
+                      <td className="px-3 py-2.5 text-neutral-500 font-mono text-center">{item.replies}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -447,7 +447,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="p-0">
               <table className="w-full text-xs">
-                <thead className="text-slate-500 border-b border-slate-800 bg-slate-900/30">
+                <thead className="text-neutral-500 border-b border-white/8 bg-[#111]/30">
                   <tr>
                     {[t.col_article, t.col_category, t.col_published].map((h) => (
                       <th key={h} className="px-3 py-2.5 text-left font-medium">{h}</th>
@@ -456,13 +456,13 @@ export default function DashboardPage() {
                 </thead>
                 <tbody>
                   {!hackread.length && (
-                    <tr><td colSpan={3} className="text-center py-6 text-slate-500">{t.loading_news}</td></tr>
+                    <tr><td colSpan={3} className="text-center py-6 text-neutral-500">{t.loading_news}</td></tr>
                   )}
                   {pagedHackread.map((item, i) => (
-                    <tr key={i} className="border-b border-slate-800/50 hover:bg-slate-900/60">
-                      <td className="px-3 py-2.5 text-cyan-400 font-semibold truncate max-w-[180px]" title={item.title}>{item.title}</td>
-                      <td className="px-3 py-2.5 text-slate-400">{item.category}</td>
-                      <td className="px-3 py-2.5 text-slate-500 font-mono whitespace-nowrap">{item.date}</td>
+                    <tr key={i} className="border-b border-white/8 hover:bg-[#111]/60">
+                      <td className="px-3 py-2.5 text-[#ff5722] font-semibold truncate max-w-[180px]" title={item.title}>{item.title}</td>
+                      <td className="px-3 py-2.5 text-neutral-400">{item.category}</td>
+                      <td className="px-3 py-2.5 text-neutral-500 font-mono whitespace-nowrap">{item.date}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -501,20 +501,20 @@ export default function DashboardPage() {
               )}
             </CardHeader>
             <CardContent className="text-sm space-y-1.5 max-h-56 overflow-y-auto">
-              {!consulted.length && <p className="text-slate-500 text-xs">{t.no_consulted}</p>}
+              {!consulted.length && <p className="text-neutral-500 text-xs">{t.no_consulted}</p>}
               {consulted.map((s, i) => (
-                <div key={i} className="flex justify-between items-center border-b border-slate-800/40 py-2">
+                <div key={i} className="flex justify-between items-center border-b border-white/6 py-2">
                   <div className="flex flex-col truncate pr-2">
-                    <span className="truncate text-slate-200 text-xs font-medium">
+                    <span className="truncate text-neutral-200 text-xs font-medium">
                       {s.query && s.query !== s.searchType ? s.query : s.searchType}
                     </span>
                     {s.query && s.query !== s.searchType && (
-                      <span className="text-[9px] text-slate-500">{s.searchType}</span>
+                      <span className="text-[9px] text-neutral-500">{s.searchType}</span>
                     )}
                   </div>
                   <span className={cn(
                     "font-mono font-bold text-xs flex-shrink-0",
-                    s.riskScore >= 70 ? "text-rose-400" : s.riskScore >= 40 ? "text-orange-400" : "text-cyan-400"
+                    s.riskScore >= 70 ? "text-rose-400" : s.riskScore >= 40 ? "text-orange-400" : "text-[#ff5722]"
                   )}>{s.riskScore}%</span>
                 </div>
               ))}
@@ -526,13 +526,13 @@ export default function DashboardPage() {
             <CardHeader className="pb-2"><CardTitle className="text-sm">{t.darkweb_title}</CardTitle></CardHeader>
             <CardContent className="text-xs space-y-1.5 max-h-56 overflow-y-auto">
               {darkweb.map((d, i) => (
-                <div key={i} className="border-b border-slate-800/40 py-2">
+                <div key={i} className="border-b border-white/6 py-2">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                     <span className="text-rose-300 font-semibold">{d.forum}</span>
                   </div>
-                  <div className="text-slate-300 text-[11px] font-medium">{d.title}</div>
-                  <div className="text-slate-500 text-[10px] mt-0.5 font-mono">{d.indicator}</div>
+                  <div className="text-neutral-300 text-[11px] font-medium">{d.title}</div>
+                  <div className="text-neutral-500 text-[10px] mt-0.5 font-mono">{d.indicator}</div>
                 </div>
               ))}
             </CardContent>
@@ -542,11 +542,11 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">{t.recent_breaches_title}</CardTitle></CardHeader>
             <CardContent className="text-xs space-y-1.5 max-h-56 overflow-y-auto">
-              {!recent.length && <p className="text-slate-500 text-xs">{t.no_index}</p>}
+              {!recent.length && <p className="text-neutral-500 text-xs">{t.no_index}</p>}
               {recent.map((r, i) => (
-                <div key={i} className="flex justify-between items-center border-b border-slate-800/40 py-2">
-                  <span className="truncate text-slate-300 text-[11px] pr-2">{r.name}</span>
-                  <span className="text-slate-500 font-mono text-[10px] flex-shrink-0">{r.year}</span>
+                <div key={i} className="flex justify-between items-center border-b border-white/6 py-2">
+                  <span className="truncate text-neutral-300 text-[11px] pr-2">{r.name}</span>
+                  <span className="text-neutral-500 font-mono text-[10px] flex-shrink-0">{r.year}</span>
                 </div>
               ))}
             </CardContent>
@@ -555,9 +555,9 @@ export default function DashboardPage() {
       {/* Breach Alert Detail Modal */}
       {showAlertModal && breachAlert && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="bg-[#111] border border-white/8 rounded-xl max-w-md w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className={cn(
-              "p-6 border-b border-slate-800 flex items-center justify-between",
+              "p-6 border-b border-white/8 flex items-center justify-between",
               breachAlert.breachCount && breachAlert.breachCount > 0 ? "bg-rose-950/20" : "bg-emerald-950/20"
             )}>
               <div className="flex items-center gap-2">
@@ -574,23 +574,23 @@ export default function DashboardPage() {
               </div>
               <button 
                 onClick={() => setShowAlertModal(false)}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-neutral-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             
             <div className="p-6 space-y-4">
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-neutral-300 leading-relaxed">
                 {breachAlert.message}
               </p>
 
               {breachAlert.breachCount && breachAlert.breachCount > 0 && (
                 <>
                   {breachAlert.mostRecent && (
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
-                      <span className="font-semibold text-slate-300">Más reciente:</span>
-                      <span className="font-mono bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-rose-300">
+                    <div className="flex items-center gap-2 text-xs text-neutral-400">
+                      <span className="font-semibold text-neutral-300">Más reciente:</span>
+                      <span className="font-mono bg-[#0a0a0a] px-2 py-0.5 rounded border border-white/8 text-rose-300">
                         {breachAlert.mostRecent}
                       </span>
                     </div>
@@ -598,12 +598,12 @@ export default function DashboardPage() {
 
                   {breachAlert.sources && breachAlert.sources.length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Fuentes de filtración:</h4>
+                      <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Fuentes de filtración:</h4>
                       <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
                         {breachAlert.sources.map((src, index) => (
                           <span 
                             key={index} 
-                            className="text-xs bg-slate-950 text-slate-300 border border-slate-800 px-2.5 py-1 rounded-md"
+                            className="text-xs bg-[#0a0a0a] text-neutral-300 border border-white/8 px-2.5 py-1 rounded-md"
                           >
                             {src}
                           </span>
@@ -625,7 +625,7 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="p-6 bg-slate-900/50 border-t border-slate-800 flex justify-end">
+            <div className="p-6 bg-[#111]/50 border-t border-white/8 flex justify-end">
               <button
                 onClick={() => {
                   clearBreachAlert();

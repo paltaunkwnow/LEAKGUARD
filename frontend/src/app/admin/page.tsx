@@ -42,9 +42,9 @@ export default function AdminPage() {
 
         {queue && (
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-yellow-400">{queue.pending}</div><div className="text-xs text-slate-500">{t.admin_pending}</div></CardContent></Card>
-            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-green-400">{queue.verified}</div><div className="text-xs text-slate-500">{t.admin_verified}</div></CardContent></Card>
-            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-red-400">{queue.rejected}</div><div className="text-xs text-slate-500">{t.admin_rejected}</div></CardContent></Card>
+            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-yellow-400">{queue.pending}</div><div className="text-xs text-neutral-500">{t.admin_pending}</div></CardContent></Card>
+            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-green-400">{queue.verified}</div><div className="text-xs text-neutral-500">{t.admin_verified}</div></CardContent></Card>
+            <Card><CardContent className="pt-6"><div className="text-2xl font-bold text-red-400">{queue.rejected}</div><div className="text-xs text-neutral-500">{t.admin_rejected}</div></CardContent></Card>
           </div>
         )}
 
@@ -57,7 +57,7 @@ export default function AdminPage() {
                   {queue?.incidents.map((threat) => (
                     <tr
                       key={threat.id}
-                      className={`border-b border-slate-800/40 cursor-pointer hover:bg-slate-900/50 ${selected?.id === threat.id ? "bg-cyan-950/30" : ""}`}
+                      className={`border-b border-white/6 cursor-pointer hover:bg-[#111]/50 ${selected?.id === threat.id ? "bg-[#ff5722]/10" : ""}`}
                       onClick={() => setSelected(threat)}
                     >
                       <td className="px-4 py-3 font-mono text-xs">{threat.id}</td>
@@ -83,7 +83,7 @@ export default function AdminPage() {
                   </div>
                 </>
               ) : (
-                <p className="text-slate-500 text-sm">{t.no_consulted}</p>
+                <p className="text-neutral-500 text-sm">{t.no_consulted}</p>
               )}
             </CardContent>
           </Card>
@@ -93,8 +93,8 @@ export default function AdminPage() {
           <CardHeader><CardTitle>{t.admin_audits_title} (PostgreSQL)</CardTitle></CardHeader>
           <CardContent className="text-sm space-y-2">
             {audits.map((a, i) => (
-              <div key={i} className="border-b border-slate-800/40 py-2">
-                <span className="text-slate-500 font-mono text-xs">{a.timestamp}</span> — <strong>{a.analyst}</strong> [{a.action}]: {a.reason}
+              <div key={i} className="border-b border-white/6 py-2">
+                <span className="text-neutral-500 font-mono text-xs">{a.timestamp}</span> — <strong>{a.analyst}</strong> [{a.action}]: {a.reason}
               </div>
             ))}
           </CardContent>

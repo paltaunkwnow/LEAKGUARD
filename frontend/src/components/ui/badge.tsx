@@ -18,5 +18,5 @@ export function statusBadge(status: string) {
     "Pending Review": "bg-yellow-950/80 text-yellow-400 border-yellow-800/60",
     "Rejected Incident": "bg-red-950/80 text-red-400 border-red-800/60",
   };
-  return map[status] || "bg-slate-800 text-slate-300 border-slate-700";
+  return map[status] || "bg-[#1a1a1a] text-slate-300 border-slate-700";
 }

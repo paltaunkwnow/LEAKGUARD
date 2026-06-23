@@ -26,7 +26,7 @@ export default function ThreatDetailPage() {
   if (!threat) {
     return (
       <ProtectedRoute>
-        <AppShell><p className="text-slate-400">{t.loading_threads.split(" ")[0]}...</p></AppShell>
+        <AppShell><p className="text-neutral-400">{t.loading_threads.split(" ")[0]}...</p></AppShell>
       </ProtectedRoute>
     );
   }
@@ -42,18 +42,18 @@ export default function ThreatDetailPage() {
           <h1 className="text-2xl font-bold">{threat.actor}</h1>
           <Badge className={statusBadge(threat.status)}>{threat.status}</Badge>
           <Badge className={statusBadge(threat.verificationStatus)}>{threat.verificationStatus}</Badge>
-          <span className="text-slate-500 font-mono">{threat.id}</span>
+          <span className="text-neutral-500 font-mono">{threat.id}</span>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 mb-6">
-          <Card><CardContent className="pt-6"><div className="text-3xl font-bold text-red-400">{threat.riskScore}</div><div className="text-sm text-slate-500">{t.col_risk}</div></CardContent></Card>
-          <Card><CardContent className="pt-6"><div className="text-3xl font-bold text-purple-400">{threat.confidence}%</div><div className="text-sm text-slate-500">{t.col_conf}</div></CardContent></Card>
+          <Card><CardContent className="pt-6"><div className="text-3xl font-bold text-red-400">{threat.riskScore}</div><div className="text-sm text-neutral-500">{t.col_risk}</div></CardContent></Card>
+          <Card><CardContent className="pt-6"><div className="text-3xl font-bold text-purple-400">{threat.confidence}%</div><div className="text-sm text-neutral-500">{t.col_conf}</div></CardContent></Card>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           <Card>
             <CardHeader><CardTitle>{t.col_victim}</CardTitle></CardHeader>
-            <CardContent className="text-sm space-y-2 text-slate-300">
+            <CardContent className="text-sm space-y-2 text-neutral-300">
               <p><strong>{t.col_victim}:</strong> {threat.victim}</p>
               <p><strong>{t.col_sector}:</strong> {threat.sector}</p>
               <p><strong>{t.col_country}:</strong> {threat.country}</p>
@@ -64,20 +64,20 @@ export default function ThreatDetailPage() {
             <CardHeader><CardTitle>Why Critical</CardTitle></CardHeader>
             <CardContent className="text-sm space-y-1">
               {Object.entries(why).map(([k, v]) => (
-                <p key={k} className={v ? "text-green-400" : "text-slate-600"}>{v ? "✓" : "✗"} {k}</p>
+                <p key={k} className={v ? "text-green-400" : "text-neutral-600"}>{v ? "✓" : "✗"} {k}</p>
               ))}
             </CardContent>
           </Card>
           <Card className="md:col-span-2">
             <CardHeader><CardTitle>Impacto</CardTitle></CardHeader>
-            <CardContent className="text-sm text-slate-300 space-y-3">
+            <CardContent className="text-sm text-neutral-300 space-y-3">
               <p><strong>Negocio:</strong> {String(threat.businessImpact)}</p>
               <p><strong>Técnico:</strong> {String(threat.technicalImpact)}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader><CardTitle>Acciones</CardTitle></CardHeader>
-            <CardContent className="text-sm text-slate-400 space-y-2">
+            <CardContent className="text-sm text-neutral-400 space-y-2">
               <p><strong className="text-red-400">Inmediato:</strong> {actions.immediate}</p>
               <p><strong className="text-orange-400">24h:</strong> {actions.hours24}</p>
               <p><strong className="text-yellow-400">7d:</strong> {actions.days7}</p>
@@ -85,9 +85,9 @@ export default function ThreatDetailPage() {
           </Card>
           <Card>
             <CardHeader><CardTitle>Evidencia</CardTitle></CardHeader>
-            <CardContent className="text-sm text-slate-400 space-y-2 font-mono">
+            <CardContent className="text-sm text-neutral-400 space-y-2 font-mono">
               <p>{evidence.source}</p>
-              <pre className="bg-slate-900 p-3 rounded text-xs overflow-x-auto">{evidence.extracted}</pre>
+              <pre className="bg-[#111] p-3 rounded text-xs overflow-x-auto">{evidence.extracted}</pre>
               <p className="font-sans">{evidence.summary}</p>
             </CardContent>
           </Card>

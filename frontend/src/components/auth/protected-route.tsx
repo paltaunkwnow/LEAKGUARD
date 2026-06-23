@@ -12,7 +12,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     if (!loading && !user) router.replace("/login");
   }, [user, loading, router]);
 
-  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">Cargando...</div>;
+  if (loading) return <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-neutral-400">Cargando...</div>;
   if (!user) return null;
   return <>{children}</>;
 }

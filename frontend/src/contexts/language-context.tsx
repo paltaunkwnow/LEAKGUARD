@@ -1,8 +1,26 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type Lang = "es" | "en" | "ru" | "he";
+
+const LANG_STORAGE_KEY = "leakguard_lang";
+
+function isLang(value: string | null): value is Lang {
+  return value === "es" || value === "en" || value === "ru" || value === "he";
+}
+
+function readStoredLang(): Lang {
+  if (typeof window === "undefined") return "es";
+  const stored = localStorage.getItem(LANG_STORAGE_KEY);
+  return isLang(stored) ? stored : "es";
+}
+
+function applyDocumentLang(l: Lang) {
+  if (typeof document === "undefined") return;
+  document.documentElement.dir = LANG_META[l].dir;
+  document.documentElement.lang = l;
+}
 
 export const LANG_META: Record<Lang, { flag: string; label: string; dir: "ltr" | "rtl" }> = {
   es: { flag: "ES", label: "Español", dir: "ltr" },
@@ -72,6 +90,11 @@ export type Translations = {
   landing_sources_subtitle: string;
   landing_cta_title: string;
   landing_cta_subtitle: string;
+  landing_footer_platform: string;
+  landing_footer_security: string;
+  landing_footer_social: string;
+  landing_price_free: string;
+  landing_footer_copyright: string;
   // Login
   login_title: string;
   login_tab: string;
@@ -271,6 +294,11 @@ const translations: Record<Lang, Translations> = {
     landing_sources_subtitle: "Consultamos múltiples bases de datos especializadas para darte la información más completa",
     landing_cta_title: "¿Tu información está segura?",
     landing_cta_subtitle: "Descúbrelo ahora. Gratis. Sin registro.",
+    landing_footer_platform: "Plataforma",
+    landing_footer_security: "Seguridad",
+    landing_footer_social: "Redes",
+    landing_price_free: "/gratis",
+    landing_footer_copyright: "LeakGuard © 2026 — Inteligencia de amenazas y OSINT",
     login_title: "Acceso a LeakGuard",
     login_tab: "Iniciar sesión",
     register_tab: "Registrarse",
@@ -457,6 +485,11 @@ const translations: Record<Lang, Translations> = {
     landing_sources_subtitle: "We query multiple specialized databases to give you the most complete information",
     landing_cta_title: "Is your information safe?",
     landing_cta_subtitle: "Find out now. Free. No registration.",
+    landing_footer_platform: "Platform",
+    landing_footer_security: "Security",
+    landing_footer_social: "Social",
+    landing_price_free: "/free",
+    landing_footer_copyright: "LeakGuard © 2026 — Threat Intelligence & OSINT",
     login_title: "LeakGuard Access",
     login_tab: "Login",
     register_tab: "Register",
@@ -643,6 +676,11 @@ const translations: Record<Lang, Translations> = {
     landing_sources_subtitle: "Мы запрашиваем несколько специализированных баз данных для наиболее полной информации",
     landing_cta_title: "Ваша информация в безопасности?",
     landing_cta_subtitle: "Узнайте сейчас. Бесплатно. Без регистрации.",
+    landing_footer_platform: "Платформа",
+    landing_footer_security: "Безопасность",
+    landing_footer_social: "Соцсети",
+    landing_price_free: "/бесплатно",
+    landing_footer_copyright: "LeakGuard © 2026 — Разведка угроз и OSINT",
     login_title: "Доступ к LeakGuard",
     login_tab: "Войти",
     register_tab: "Регистрация",
@@ -829,6 +867,11 @@ const translations: Record<Lang, Translations> = {
     landing_sources_subtitle: "אנו מבצעים שאילתות ממספר בסיסי נתונים מיוחדים כדי לספק לך את המידע המלא ביותר",
     landing_cta_title: "המידע שלך בטוח?",
     landing_cta_subtitle: "גלה עכשיו. חינם. ללא הרשמה.",
+    landing_footer_platform: "פלטפורמה",
+    landing_footer_security: "אבטחה",
+    landing_footer_social: "רשתות",
+    landing_price_free: "/חינם",
+    landing_footer_copyright: "LeakGuard © 2026 — מודיעין איומים ו-OSINT",
     login_title: "גישה ל-LeakGuard",
     login_tab: "כניסה",
     register_tab: "הרשמה",
@@ -973,12 +1016,16 @@ const LanguageContext = createContext<LanguageContextType>({
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("es");
 
+  useEffect(() => {
+    const stored = readStoredLang();
+    setLangState(stored);
+    applyDocumentLang(stored);
+  }, []);
+
   const setLang = (l: Lang) => {
     setLangState(l);
-    if (typeof document !== "undefined") {
-      document.documentElement.dir = LANG_META[l].dir;
-      document.documentElement.lang = l;
-    }
+    localStorage.setItem(LANG_STORAGE_KEY, l);
+    applyDocumentLang(l);
   };
 
   return (

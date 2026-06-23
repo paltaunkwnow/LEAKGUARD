@@ -33,7 +33,7 @@ export function DashboardCharts({ data }: { data: ChartData }) {
     <div className="grid md:grid-cols-2 gap-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-semibold text-slate-300">{t.chart_sectors}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-neutral-300">{t.chart_sectors}</CardTitle>
         </CardHeader>
         <CardContent className="h-56">
           <Bar
@@ -53,7 +53,7 @@ export function DashboardCharts({ data }: { data: ChartData }) {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-semibold text-slate-300">{t.chart_verification}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-neutral-300">{t.chart_verification}</CardTitle>
         </CardHeader>
         <CardContent className="h-56">
           <Doughnut

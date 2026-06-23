@@ -62,32 +62,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 relative">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 relative">
       {/* Language switcher - top right */}
       <div className="fixed top-4 right-4 z-50">
         <div className="relative">
           <button
             onClick={() => setLangOpen((o) => !o)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors text-sm font-medium"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-white/10 bg-[#111] hover:bg-white/5 text-neutral-300 hover:text-white transition-colors text-sm font-medium"
           >
             <span className="text-base">{LANG_META[lang].flag}</span>
             <span className="hidden sm:inline">{LANG_META[lang].label}</span>
             <span className={cn("text-xs transition-transform duration-200 inline-block", langOpen && "rotate-180")}>▾</span>
           </button>
           {langOpen && (
-            <div className="absolute right-0 mt-1.5 w-44 rounded-lg border border-slate-700 bg-slate-900 shadow-xl shadow-black/40 overflow-hidden z-50">
+            <div className="absolute right-0 mt-1.5 w-44 rounded-xl border border-white/10 bg-[#111] shadow-xl shadow-black/40 overflow-hidden z-50">
               {(Object.entries(LANG_META) as [Lang, typeof LANG_META[Lang]][]).map(([code, info]) => (
                 <button
                   key={code}
                   onClick={() => { setLang(code); setLangOpen(false); }}
                   className={cn(
                     "w-full flex items-center gap-2.5 px-3 py-2.5 text-sm transition-colors",
-                    lang === code ? "bg-cyan-950/60 text-cyan-400 font-semibold" : "text-slate-300 hover:bg-slate-800"
+                    lang === code ? "bg-[#ff5722]/15 text-[#ff5722] font-semibold" : "text-neutral-300 hover:bg-white/5"
                   )}
                 >
                   <span className="text-base">{info.flag}</span>
                   <span>{info.label}</span>
-                  {lang === code && <span className="ml-auto text-cyan-400 text-xs">✓</span>}
+                  {lang === code && <span className="ml-auto text-[#ff5722] text-xs">✓</span>}
                 </button>
               ))}
             </div>
@@ -97,7 +97,7 @@ export default function LoginPage() {
 
       <Card className="w-full max-w-md z-10">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-2 text-cyan-400"><Shield className="w-8 h-8" /></div>
+          <div className="flex justify-center mb-2 text-[#ff5722]"><Shield className="w-8 h-8" /></div>
           <CardTitle>{t.login_title}</CardTitle>
         </CardHeader>
         <CardContent>
@@ -119,14 +119,14 @@ export default function LoginPage() {
                 id="accept-terms"
                 checked={acceptedTerms}
                 onChange={(e) => handleCheckboxChange(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-cyan-500 focus:ring-cyan-500/20 cursor-pointer accent-cyan-500 shrink-0"
+                className="mt-0.5 w-4 h-4 rounded border-white/15 bg-[#111] cursor-pointer accent-[#ff5722] shrink-0"
               />
-              <label htmlFor="accept-terms" className="text-xs text-slate-400 leading-normal cursor-pointer">
+              <label htmlFor="accept-terms" className="text-xs text-neutral-400 leading-normal cursor-pointer">
                 <span>{t.login_accept_terms_prefix}</span>
                 <button
                   type="button"
                   onClick={() => setShowTermsModal(true)}
-                  className="text-cyan-400 hover:text-cyan-300 hover:underline font-bold transition-all focus:outline-none inline-block px-1"
+                  className="text-[#ff5722] hover:text-[#ff6b3d] hover:underline font-bold transition-all focus:outline-none inline-block px-1"
                 >
                   {t.login_accept_terms_link}
                 </button>
@@ -140,9 +140,9 @@ export default function LoginPage() {
             </Button>
           </form>
           <Button variant="outline" className="w-full mt-3" onClick={handleDemo}>{t.demo_btn}</Button>
-          <div className="flex items-center justify-between text-xs text-slate-500 mt-4">
-            <Link href="/" className="hover:text-cyan-400 transition-colors">{t.back_home}</Link>
-            <Link href="/terms" className="hover:text-cyan-400 transition-colors underline">{t.footer_terms}</Link>
+          <div className="flex items-center justify-between text-xs text-neutral-500 mt-4">
+            <Link href="/" className="hover:text-[#ff5722] transition-colors">{t.back_home}</Link>
+            <Link href="/terms" className="hover:text-[#ff5722] transition-colors underline">{t.footer_terms}</Link>
           </div>
         </CardContent>
       </Card>
@@ -150,11 +150,11 @@ export default function LoginPage() {
       {/* Terms and Conditions Modal Overlay */}
       {showTermsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm transition-all duration-300">
-          <div className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-white/10 bg-slate-900/95 text-slate-100 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-white/10 bg-[#111]/95 text-neutral-100 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="p-6 border-b border-white/5 flex items-center justify-between" dir={LANG_META[lang]?.dir === "rtl" ? "rtl" : "ltr"}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <div className="w-10 h-10 rounded-xl bg-[#ff5722]/10 border border-[#ff5722]/20 flex items-center justify-center text-[#ff5722]">
                   <Shield className="w-5 h-5" />
                 </div>
                 <div>
@@ -189,7 +189,7 @@ export default function LoginPage() {
                   return (
                     <div key={idx} className="p-4 rounded-xl border border-white/5 bg-white/[0.01]">
                       <div className="flex items-center gap-2 mb-3">
-                        <Icon className="w-4 h-4 text-cyan-400" />
+                        <Icon className="w-4 h-4 text-[#ff5722]" />
                         <h3 className="font-bold text-white text-sm">{section.title}</h3>
                       </div>
                       <div className="space-y-2 text-slate-300 text-xs leading-relaxed">
@@ -209,7 +209,7 @@ export default function LoginPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-white/5 flex justify-end gap-3 bg-slate-950/40 rounded-b-3xl" dir={LANG_META[lang]?.dir === "rtl" ? "rtl" : "ltr"}>
+            <div className="p-4 border-t border-white/5 flex justify-end gap-3 bg-black/40 rounded-b-3xl" dir={LANG_META[lang]?.dir === "rtl" ? "rtl" : "ltr"}>
               <Button
                 variant="outline"
                 size="sm"
@@ -222,7 +222,7 @@ export default function LoginPage() {
               </Button>
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white"
+                className="bg-[#ff5722] hover:bg-[#ff6b3d] text-white rounded-full"
                 onClick={() => {
                   setAcceptedTerms(true);
                   setShowTermsModal(false);

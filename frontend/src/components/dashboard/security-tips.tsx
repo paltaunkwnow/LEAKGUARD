@@ -7,7 +7,7 @@ export function SecurityTips() {
   const { t } = useLang();
 
   const tips = [
-    { icon: Smartphone, title: t.tip_2fa_title, desc: t.tip_2fa_desc, color: "text-cyan-400", bg: "bg-cyan-500/10 border-cyan-500/20" },
+    { icon: Smartphone, title: t.tip_2fa_title, desc: t.tip_2fa_desc, color: "text-[#ff5722]", bg: "bg-[#ff5722]/10 border-[#ff5722]/20" },
     { icon: Key, title: t.tip_pwd_title, desc: t.tip_pwd_desc, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20" },
     { icon: Mail, title: t.tip_monitor_title, desc: t.tip_monitor_desc, color: "text-rose-400", bg: "bg-rose-500/10 border-rose-500/20" },
     { icon: MousePointer, title: t.tip_phishing_title, desc: t.tip_phishing_desc, color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20" },
@@ -15,11 +15,11 @@ export function SecurityTips() {
   ];
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
-      <div className="flex items-center gap-2 px-5 py-4 border-b border-slate-800">
-        <Shield className="w-4 h-4 text-cyan-400" />
+    <div className="rounded-xl border border-white/8 bg-[#111]/60 overflow-hidden">
+      <div className="flex items-center gap-2 px-5 py-4 border-b border-white/8">
+        <Shield className="w-4 h-4 text-[#ff5722]" />
         <h3 className="font-bold text-white text-sm">{t.tips_title}</h3>
-        <span className="ml-auto text-slate-500 text-xs">{t.tips_subtitle}</span>
+        <span className="ml-auto text-neutral-500 text-xs">{t.tips_subtitle}</span>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 p-4">
         {tips.map(({ icon: Icon, title, desc, color, bg }) => (
@@ -28,7 +28,7 @@ export function SecurityTips() {
               <Icon className="w-4 h-4 flex-shrink-0" />
               <span className="font-semibold text-white text-xs">{title}</span>
             </div>
-            <p className="text-slate-400 text-xs leading-relaxed">{desc}</p>
+            <p className="text-neutral-400 text-xs leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>

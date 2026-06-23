@@ -219,14 +219,14 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
     <div className="space-y-4">
       {/* Selector controls */}
       <div className="flex items-center justify-between">
-        <div className="flex gap-1.5 p-1 bg-slate-950/60 border border-slate-800 rounded-xl">
+        <div className="flex gap-1.5 p-1 bg-[#0a0a0a]/60 border border-white/8 rounded-xl">
           <button
             onClick={() => setMapMode("incidents")}
             className={cn(
               "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200",
               mapMode === "incidents"
-                ? "bg-slate-800 text-white shadow-md shadow-black/25"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-[#1a1a1a] text-white shadow-md shadow-black/25"
+                : "text-neutral-400 hover:text-neutral-200"
             )}
           >
             <Map className="w-3.5 h-3.5" />
@@ -237,8 +237,8 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
             className={cn(
               "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200",
               mapMode === "simulator"
-                ? "bg-slate-800 text-white shadow-md shadow-black/25"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-[#1a1a1a] text-white shadow-md shadow-black/25"
+                : "text-neutral-400 hover:text-neutral-200"
             )}
           >
             <Activity className="w-3.5 h-3.5 animate-pulse text-rose-500" />
@@ -246,7 +246,7 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
           </button>
         </div>
 
-        <div className="text-[10px] text-slate-500 font-mono tracking-wider uppercase">
+        <div className="text-[10px] text-neutral-500 font-mono tracking-wider uppercase">
           {mapMode === "incidents" ? "Database Feed Mode" : "OSINT Cyber Threat Stream"}
         </div>
       </div>
@@ -256,7 +256,7 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
         key={`${countryFilter || "all"}-${mapMode}`} // remount on mode/filter change
         center={center}
         zoom={zoom}
-        className="h-80 w-full rounded-lg z-0 border border-slate-800/80"
+        className="h-80 w-full rounded-lg z-0 border border-white/8/80"
         style={{ background: "#0f172a" }}
       >
         <TileLayer
@@ -316,7 +316,7 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
               pathOptions={{ color: "#a855f7", fillColor: "#a855f7", fillOpacity: 0.9, weight: 1 }}
             >
               <Popup>
-                <div className="text-xs p-1 text-slate-200">
+                <div className="text-xs p-1 text-neutral-200">
                   <strong className="text-purple-400">Origen de Amenaza (Actor)</strong>
                   <div className="mt-1 font-mono">{attack.actor}</div>
                 </div>
@@ -330,7 +330,7 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
               pathOptions={{ color: attack.color, fillColor: attack.color, fillOpacity: 0.8, weight: 1.5 }}
             >
               <Popup>
-                <div className="text-xs p-1 text-slate-200">
+                <div className="text-xs p-1 text-neutral-200">
                   <strong className="text-rose-400">Objetivo del Ataque (Víctima)</strong>
                   <div className="mt-1 font-mono">Organización: {attack.victimOrg}</div>
                   <div className="font-mono">País: {attack.victimCountry}</div>
@@ -356,29 +356,29 @@ export function ThreatMapInner({ threats, countryFilter }: Props) {
 
       {/* Attack stream log ticker for the simulator */}
       {mapMode === "simulator" && (
-        <Card className="border-slate-800 bg-slate-950/40 overflow-hidden">
-          <CardHeader className="py-2.5 px-4 border-b border-slate-800/80 bg-slate-900/10 flex flex-row items-center gap-2">
+        <Card className="border-white/8 bg-[#0a0a0a]/40 overflow-hidden">
+          <CardHeader className="py-2.5 px-4 border-b border-white/8/80 bg-[#111]/10 flex flex-row items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Flujo de Amenazas Detectadas en Tiempo Real</span>
+            <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Flujo de Amenazas Detectadas en Tiempo Real</span>
           </CardHeader>
           <CardContent className="p-0">
             <div 
               ref={tickerRef} 
-              className="max-h-28 overflow-y-auto divide-y divide-slate-800/30 font-mono text-[10px] p-2 space-y-1.5 scrollbar-thin"
+              className="max-h-28 overflow-y-auto divide-y divide-white/6 font-mono text-[10px] p-2 space-y-1.5 scrollbar-thin"
             >
               {attacks.map((attack) => (
-                <div key={attack.id} className="flex flex-wrap items-center justify-between py-1.5 px-2 hover:bg-slate-900/30 transition-colors">
+                <div key={attack.id} className="flex flex-wrap items-center justify-between py-1.5 px-2 hover:bg-[#111]/30 transition-colors">
                   <div className="flex flex-wrap items-center gap-2 min-w-0">
-                    <span className="text-slate-500">[{attack.time}]</span>
+                    <span className="text-neutral-500">[{attack.time}]</span>
                     <span className="text-purple-400 font-bold truncate max-w-[120px]" title={attack.actor}>{attack.actor}</span>
-                    <span className="text-slate-400">compromete a</span>
+                    <span className="text-neutral-400">compromete a</span>
                     <span className="text-rose-400 font-bold truncate max-w-[140px]" title={attack.victimOrg}>{attack.victimOrg}</span>
-                    <span className="text-slate-400">({attack.victimSector})</span>
-                    <span className="text-slate-500">en</span>
+                    <span className="text-neutral-400">({attack.victimSector})</span>
+                    <span className="text-neutral-500">en</span>
                     <span className="text-white font-bold">{attack.victimCountry}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
-                    <span className="text-slate-400 text-[9px] bg-slate-900 border border-slate-800/60 px-1.5 py-0.2 rounded">
+                    <span className="text-neutral-400 text-[9px] bg-[#111] border border-white/8/60 px-1.5 py-0.2 rounded">
                       {attack.attackType}
                     </span>
                     <span 

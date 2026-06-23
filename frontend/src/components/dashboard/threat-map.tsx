@@ -7,7 +7,7 @@ export const ThreatMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-80 bg-slate-900 rounded-lg animate-pulse flex items-center justify-center text-slate-600 text-sm">
+      <div className="h-80 bg-[#111] rounded-lg animate-pulse flex items-center justify-center text-neutral-600 text-sm">
         Cargando mapa...
       </div>
     ),
