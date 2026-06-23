@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useLang, LANG_META, Lang } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
+import SplitText from "@/components/ui/split-text";
 
 /* ─── Animated Canvas Background ─────────────────────────────── */
 function CyberCanvas() {
@@ -193,7 +194,8 @@ function AnimCounter({ target, suffix = "" }: { target: number; suffix?: string 
     return () => obs.disconnect();
   }, [target]);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  const fmt = (n: number) => Number.isInteger(target) ? n.toLocaleString() : n.toFixed(1);
+  return <span ref={ref}>{fmt(count)}{suffix}</span>;
 }
 
 /* ─── Language Switcher ─────────────────────────────────────────── */
@@ -306,13 +308,23 @@ export default function LandingPage() {
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
-          <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-            {t.landing_hero_title.split(" ").slice(0, 4).join(" ")}
-          </span>
+          <SplitText
+            text={t.landing_hero_title.split(" ").slice(0, 4).join(" ")}
+            className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent"
+            delay={30}
+            duration={0.5}
+            splitType="chars"
+            tag="span"
+          />
           <br />
-          <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-rose-400 bg-clip-text text-transparent">
-            {t.landing_hero_title.split(" ").slice(4).join(" ")}
-          </span>
+          <SplitText
+            text={t.landing_hero_title.split(" ").slice(4).join(" ")}
+            className="bg-gradient-to-r from-cyan-400 via-purple-400 to-rose-400 bg-clip-text text-transparent"
+            delay={30}
+            duration={0.5}
+            splitType="chars"
+            tag="span"
+          />
         </h1>
 
         <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-3 leading-relaxed">{t.landing_hero_sub1}</p>
@@ -343,7 +355,7 @@ export default function LandingPage() {
       <section className="relative z-10 py-12 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {[
-            { value: 12400000, suffix: "+", label: t.landing_stats_breaches, color: "text-rose-400" },
+            { value: 12.4, suffix: "M+", label: t.landing_stats_breaches, color: "text-rose-400" },
             { value: 47, suffix: "+", label: t.landing_stats_countries, color: "text-cyan-400" },
             { value: 9, suffix: "", label: t.landing_stats_sources, color: "text-purple-400" },
             { value: 248, suffix: "", label: t.landing_stats_alerts, color: "text-orange-400" },
