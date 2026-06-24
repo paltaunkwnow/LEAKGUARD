@@ -506,10 +506,12 @@ export default function DashboardPage() {
                 <div key={i} className="flex justify-between items-center border-b border-white/6 py-2">
                   <div className="flex flex-col truncate pr-2">
                     <span className="truncate text-neutral-200 text-xs font-medium">
-                      {s.query && s.query !== s.searchType ? s.query : s.searchType}
+                      {s.searchType}
                     </span>
-                    {s.query && s.query !== s.searchType && (
-                      <span className="text-[9px] text-neutral-500">{s.searchType}</span>
+                    {s.queryHashPrefix && (
+                      <span className="text-[9px] text-neutral-500 font-mono">
+                        {t.consulted_hash_label} #{s.queryHashPrefix}
+                      </span>
                     )}
                   </div>
                   <span className={cn(

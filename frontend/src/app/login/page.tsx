@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { termsData } from "@/app/terms/termsData";
+import { isAuthActionDisabled } from "@/app/login/auth-consent";
 
 export default function LoginPage() {
   const { login, register, demo, user, loading } = useAuth();
@@ -34,7 +35,7 @@ export default function LoginPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!acceptedTerms) {
-      setError(lang === "es" ? "Debe aceptar los términos y condiciones." : "You must accept the terms and conditions.");
+      setError(t.login_terms_required_error);
       return;
     }
     setError("");
@@ -49,6 +50,11 @@ export default function LoginPage() {
   };
 
   const handleDemo = async () => {
+    if (!acceptedTerms) {
+      setError(t.login_terms_required_error);
+      return;
+    }
+    setError("");
     await demo();
     router.push("/dashboard");
   };
@@ -122,24 +128,32 @@ export default function LoginPage() {
                 className="mt-0.5 w-4 h-4 rounded border-white/15 bg-[#111] cursor-pointer accent-[#ff5722] shrink-0"
               />
               <label htmlFor="accept-terms" className="text-xs text-neutral-400 leading-normal cursor-pointer">
-                <span>{t.login_accept_terms_prefix}</span>
+                <span>{t.login_cfaa_consent}</span>
                 <button
                   type="button"
                   onClick={() => setShowTermsModal(true)}
-                  className="text-[#ff5722] hover:text-[#ff6b3d] hover:underline font-bold transition-all focus:outline-none inline-block px-1"
+                  className="text-[#ff5722] hover:text-[#ff6b3d] hover:underline font-bold transition-all focus:outline-none inline px-0"
                 >
                   {t.login_accept_terms_link}
                 </button>
+                <span>.</span>
               </label>
             </div>
 
             {error && <p className="text-red-400 text-sm font-medium">{error}</p>}
             {alert && <p className="text-yellow-400 text-sm">{alert}</p>}
-            <Button type="submit" className="w-full font-bold" disabled={!acceptedTerms}>
+            <Button type="submit" className="w-full font-bold" disabled={isAuthActionDisabled(acceptedTerms, loading)}>
               {tab === "login" ? t.login_btn : t.register_btn}
             </Button>
           </form>
-          <Button variant="outline" className="w-full mt-3" onClick={handleDemo}>{t.demo_btn}</Button>
+          <Button
+            variant="outline"
+            className="w-full mt-3"
+            onClick={handleDemo}
+            disabled={isAuthActionDisabled(acceptedTerms, loading)}
+          >
+            {t.demo_btn}
+          </Button>
           <div className="flex items-center justify-between text-xs text-neutral-500 mt-4">
             <Link href="/" className="hover:text-[#ff5722] transition-colors">{t.back_home}</Link>
             <Link href="/terms" className="hover:text-[#ff5722] transition-colors underline">{t.footer_terms}</Link>

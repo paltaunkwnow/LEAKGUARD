@@ -11,7 +11,6 @@ class ConsultedScan(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
-    query: Mapped[str] = mapped_column(String(255), index=True)
     query_hash: Mapped[str] = mapped_column(String(64), index=True, default="")
     search_type: Mapped[str] = mapped_column(String(80))
     risk_score: Mapped[float] = mapped_column(Float)

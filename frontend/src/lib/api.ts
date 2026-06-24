@@ -151,7 +151,13 @@ export type ScanResult = {
     externals: Record<string, string>;
   };
 };
-export type ConsultedScan = { query?: string; searchType: string; riskScore: number; totalLogins: number; timestamp: string };
+export type ConsultedScan = {
+  queryHashPrefix?: string;
+  searchType: string;
+  riskScore: number;
+  totalLogins: number;
+  timestamp: string;
+};
 export type DashboardKpis = { threatsToday: number; critical: number; verified: number; pending: number; actors: number; sectors: number };
 export type ChartData = {
   sectors: { labels: string[]; data: number[] };

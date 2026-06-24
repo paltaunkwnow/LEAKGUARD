@@ -10,6 +10,7 @@ from app.services.censor import (
     normalize_osint_entry,
     severity_from_record,
 )
+from app.services.response_sanitize import build_public_breach_record
 
 
 def parse_osint_response(data: dict[str, Any] | None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -87,15 +88,13 @@ def parse_osint_response(data: dict[str, Any] | None) -> tuple[list[dict[str, An
                         entry_date = match.group(1)
 
                 records.append(
-                    {
-                        "date": entry_date,
-                        "title": source_name,
-                        "sourceName": source_name,
-                        "login": login_display,
-                        "credential": cred,
-                        "severity": severity,
-                        "normalized": {k: v for k, v in normalized.items() if k != "raw"},
-                    }
+                    build_public_breach_record(
+                        entry_date=entry_date,
+                        source_name=source_name,
+                        login_display=login_display,
+                        credential=cred,
+                        severity=severity,
+                    )
                 )
         elif source_data.get("InfoLeak"):
             stats["databasesWithHits"] += 1
@@ -109,15 +108,14 @@ def parse_osint_response(data: dict[str, Any] | None) -> tuple[list[dict[str, An
                     fallback_date = raw_date
 
             records.append(
-                {
-                    "date": fallback_date,
-                    "title": source_name,
-                    "sourceName": source_name,
-                    "login": "—",
-                    "credential": "—",
-                    "severity": "Medium",
-                    "indicators": str(source_data["InfoLeak"])[:120],
-                }
+                build_public_breach_record(
+                    entry_date=fallback_date,
+                    source_name=source_name,
+                    login_display="—",
+                    credential="—",
+                    severity="Medium",
+                    indicators=str(source_data["InfoLeak"]),
+                )
             )
 
     if stats["apiTotalResults"] is None and sum_reported > 0:

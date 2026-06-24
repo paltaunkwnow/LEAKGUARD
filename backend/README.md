@@ -61,7 +61,7 @@ Las tablas se crean automáticamente al iniciar (`init_db` + `seed_database`).
 Modelos:
 - `users` — autenticación
 - `incidents` — threat intelligence (JSONB payload)
-- `consulted_scans` — historial Exposure Check
+- `consulted_scans` — historial Exposure Check (solo `query_hash` + metadatos; sin query en texto plano)
 - `audit_logs` — trazabilidad admin
 
 ## Playwright (scraping dinámico)

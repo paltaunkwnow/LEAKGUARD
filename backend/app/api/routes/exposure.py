@@ -19,6 +19,7 @@ from app.services.exposure import (
 )
 from app.services.k_anonymity import hash_query
 from app.services.osint import query_osint
+from app.services.response_sanitize import sanitize_scan_response
 
 router = APIRouter(prefix="/exposure", tags=["exposure"])
 
@@ -229,7 +230,6 @@ async def exposure_scan(
         # Log consulted scan
         scan = ConsultedScan(
             user_id=user.id if user else None,
-            query=query,
             query_hash=hash_query(query),
             search_type=search_type,
             risk_score=float(risk["score"]),
@@ -238,15 +238,17 @@ async def exposure_scan(
         db.add(scan)
         await db.commit()
 
-        return {
-            "query": query,
-            "searchType": search_type,
-            "records": records,
-            "stats": stats,
-            "risk": risk,
-            "recommendations": recommendations,
-            "actorProfile": profile
-        }
+        return sanitize_scan_response(
+            {
+                "query": query,
+                "searchType": search_type,
+                "records": records,
+                "stats": stats,
+                "risk": risk,
+                "recommendations": recommendations,
+                "actorProfile": profile,
+            }
+        )
 
     # Breach Search Mode (default)
     search_type = detect_search_type(query, body.mode)
@@ -312,7 +314,6 @@ async def exposure_scan(
 
     scan = ConsultedScan(
         user_id=user.id if user else None,
-        query=query,
         query_hash=hash_query(query),
         search_type=search_type,
         risk_score=float(risk["score"]),
@@ -321,15 +322,17 @@ async def exposure_scan(
     db.add(scan)
     await db.commit()
 
-    return {
-        "query": query,
-        "searchType": search_type,
-        "records": records,
-        "stats": stats,
-        "risk": risk,
-        "recommendations": recommendations,
-        "sourcesChecked": sources_checked
-    }
+    return sanitize_scan_response(
+        {
+            "query": query,
+            "searchType": search_type,
+            "records": records,
+            "stats": stats,
+            "risk": risk,
+            "recommendations": recommendations,
+            "sourcesChecked": sources_checked,
+        }
+    )
 
 
 @router.get("/consulted")
@@ -344,7 +347,7 @@ async def consulted_scans(
     result = await db.execute(q)
     return [
         {
-            "query": s.query,
+            "queryHashPrefix": (s.query_hash or "")[:8],
             "searchType": s.search_type,
             "riskScore": s.risk_score,
             "totalLogins": s.total_logins,

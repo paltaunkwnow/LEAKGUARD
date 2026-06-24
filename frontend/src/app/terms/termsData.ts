@@ -1,4 +1,4 @@
-import { FileText, ShieldAlert, EyeOff, Lock, Globe, LucideIcon } from "lucide-react";
+import { FileText, ShieldAlert, EyeOff, Lock, Globe, Scale, Ban, LucideIcon } from "lucide-react";
 import { Lang } from "@/contexts/language-context";
 
 export const termsData: Record<Lang, {
@@ -12,100 +12,156 @@ export const termsData: Record<Lang, {
   es: {
     title: "Términos de Servicio y Aviso Legal",
     subtitle: "Marco regulatorio y condiciones de uso para LeakGuard",
-    lastUpdated: "Última actualización: 22 de junio de 2026",
+    lastUpdated: "Última actualización: 23 de junio de 2026",
     intro: "Bienvenido a LeakGuard. Antes de utilizar nuestra plataforma OSINT y de inteligencia de amenazas, le solicitamos que lea detenidamente este aviso legal. El acceso y uso del sitio implica la aceptación plena de estas condiciones.",
     sections: [
       {
-        title: "1. Finalidad de la Plataforma",
-        icon: FileText,
-        content: [
-          "LeakGuard es una herramienta desarrollada con fines exclusivos de ciberseguridad, educación e inteligencia preventiva frente a incidentes. Su objetivo es permitir a individuos y organizaciones verificar si su información de credenciales o exposición de activos ha sido comprometida en filtraciones públicas.",
-          "El servicio está diseñado para mitigar riesgos cibernéticos facilitando alertas oportunas y recomendaciones automatizadas de remediación."
-        ]
-      },
-      {
-        title: "2. Neutralidad Técnica y Exención de Responsabilidad",
+        title: "1. Autorización y uso lícito (cumplimiento CFAA)",
         icon: ShieldAlert,
         content: [
-          "LeakGuard es una plataforma de indexación y consulta pasiva. Declaramos explícitamente que no tenemos relación alguna, directa o indirecta, con intrusiones, hackeos, robos de información o ciberataques.",
-          "Nuestra actividad se limita a recopilar, procesar y dar a conocer información pública previamente indexada y disponible en el ciberespacio, incluyendo foros especializados y fuentes abiertas (OSINT).",
-          "Al igual que plataformas tecnológicas internacionalmente reconocidas como Intelligence X (IntelX) o Have I Been Pwned, operamos de forma neutral sin participar en la distribución maliciosa de datos."
+          "Usted declara y garantiza que es el titular autorizado, o que cuenta con el consentimiento escrito explícito y verificable del titular, de todos los dominios, direcciones de correo electrónico, números de teléfono u otros activos digitales que consulte a través de la plataforma LeakGuard. La consulta no autorizada de activos de terceros está estrictamente prohibida y puede constituir una violación de la Computer Fraud and Abuse Act (18 U.S.C. § 1030) y otras leyes locales, estatales y federales aplicables. LeakGuard se reserva el derecho de suspender o cancelar su cuenta de inmediato ante sospecha de uso no autorizado y de reportar dicha actividad a las autoridades competentes."
         ]
       },
       {
-        title: "3. Redacción y Censura de Credenciales",
+        title: "2. Uso estrictamente defensivo y conducta prohibida",
+        icon: Ban,
+        content: [
+          "LeakGuard se proporciona exclusivamente como herramienta defensiva de inteligencia de amenazas. Usted acepta expresamente que NO utilizará la plataforma, sus datos ni su API para: (a) credential stuffing, password spraying o intentos de acceso no autorizado a cualquier sistema, red o cuenta; (b) doxing, acoso, acecho, extorsión o espionaje corporativo; (c) cualquier acción que viole las leyes locales, estatales, nacionales o internacionales aplicables."
+        ]
+      },
+      {
+        title: "3. Exención de garantías (datos «tal cual»)",
+        icon: FileText,
+        content: [
+          "EL SERVICIO, INCLUIDOS TODOS LOS DATOS OSINT Y DE INTELIGENCIA DE AMENAZAS, SE PROPORCIONA «TAL CUAL» Y «SEGÚN DISPONIBILIDAD». Dado que LeakGuard agrega metadatos de filtraciones de terceros, foros comprometidos e índices de la dark web, no podemos ni garantizamos la exactitud, integridad, legalidad o fiabilidad de la información proporcionada. EN LA MÁXIMA MEDIDA PERMITIDA POR LA LEY, LEAKGUARD RENUNCIA EXPRESAMENTE A TODAS LAS GARANTÍAS, YA SEAN EXPRESAS, IMPLÍCITAS, LEGALES O DE OTRO TIPO, INCLUIDAS, ENTRE OTRAS, LAS GARANTÍAS DE COMERCIABILIDAD O IDONEIDAD PARA UN FIN PARTICULAR."
+        ]
+      },
+      {
+        title: "4. Indemnización",
+        icon: Scale,
+        content: [
+          "Usted acepta defender, indemnizar y mantener indemne a LeakGuard, sus fundadores, afiliados, empleados y agentes frente a cualquier reclamación, responsabilidad, daño, sentencia, indemnización, pérdida, coste, gasto u honorario (incluidos honorarios razonables de abogados) que surja de o esté relacionado con su violación de estos Términos de Servicio, su acceso no autorizado a activos de terceros o su uso indebido de los datos de inteligencia de amenazas proporcionados por la plataforma."
+        ]
+      },
+      {
+        title: "5. Naturaleza del servicio y alojamiento de datos",
         icon: EyeOff,
         content: [
-          "Para salvaguardar la seguridad de los afectados, LeakGuard implementa de forma obligatoria la censura de contraseñas y datos sensibles en texto plano.",
-          "El sistema nunca mostrará de manera pública ni almacenará contraseñas legibles completas. Se limita a mostrar fragmentos censurados y a calcular índices de riesgo para alertar sobre la necesidad de un cambio de credenciales."
+          "LeakGuard opera únicamente como motor de búsqueda e índice analítico de metadatos relacionados con incidentes de seguridad. LeakGuard no aloja, almacena ni distribuye los volcados de datos comprometidos originales ni materiales de hacking en bruto. Para proteger la privacidad, todas las consultas están sujetas a censura en el servidor y protocolos de K-Anonymity. Los campos de credenciales e identidad se censuran en el servidor antes de enviar cualquier respuesta API al cliente; las contraseñas en texto plano nunca se transmiten. Usted reconoce que la visualización de metadatos expuestos no le otorga propiedad ni derechos para explotar dichos datos."
         ]
       },
       {
-        title: "4. Privacidad y Tratamiento de Datos",
-        icon: Lock,
+        title: "6. Limitación de responsabilidad",
+        icon: FileText,
         content: [
-          "Datos del usuario: Los datos personales recopilados durante el registro (como nombre y correo electrónico) se utilizan estrictamente para configurar el perfil del usuario y enviar notificaciones y alertas automáticas de filtraciones.",
-          "No comercialización: Garantizamos bajo este marco que no vendemos, distribuimos ni comerciamos con la información personal de nuestros usuarios.",
-          "Sin registros invasivos: LeakGuard no almacena los términos de búsqueda específicos realizados por los usuarios ni las direcciones IP desde las cuales se realizan las consultas, preservando el anonimato de las auditorías de seguridad."
+          "EN LA MÁXIMA MEDIDA PERMITIDA POR LA LEY APLICABLE, EN NINGÚN CASO LEAKGUARD, SUS DIRECTORES, EMPLEADOS O AGENTES SERÁN RESPONSABLES DE DAÑOS INDIRECTOS, PUNITIVOS, INCIDENTALES, ESPECIALES, CONSECUENCIALES O EJEMPLARES. BAJO NINGUNA CIRCUNSTANCIA LA RESPONSABILIDAD TOTAL DE LEAKGUARD EXCEDERÁ EL IMPORTE QUE USTED HAYA PAGADO A LA EMPRESA EN LOS ÚLTIMOS DOCE (12) MESES, O CIEN DÓLARES ESTADOUNIDENSES (100,00 USD), LO QUE SEA MAYOR."
         ]
       },
       {
-        title: "5. Marco Legal y Jurisdicción",
+        title: "7. Ley aplicable y arbitraje",
         icon: Globe,
         content: [
-          "Esta plataforma se respalda y opera bajo el amparo de la legislación de los Estados Unidos de América en lo relativo a la indexación de información de acceso público y a la protección de herramientas de investigación y seguridad en Internet.",
-          "Cualquier uso indebido de la información obtenida a través de LeakGuard es responsabilidad exclusiva del usuario final. El usuario se compromete a no utilizar esta plataforma para actividades ilícitas, de acoso, extorsión o intrusión digital."
+          "Estos Términos se regirán por las leyes del Estado de Delaware, sin tener en cuenta sus principios de conflicto de leyes. Cualquier disputa derivada de estos Términos se resolverá exclusivamente mediante arbitraje vinculante individual, y usted renuncia expresamente a cualquier derecho a participar en una demanda colectiva o arbitraje colectivo."
+        ]
+      },
+      {
+        title: "8. Cumplimiento de exportación y sanciones",
+        icon: Globe,
+        content: [
+          "Usted declara y garantiza que no se encuentra en un país sujeto a embargo del Gobierno de los Estados Unidos, ni figura en ninguna lista gubernamental estadounidense de partes prohibidas o restringidas (como la lista OFAC de Nacionales Especialmente Designados). Usted acepta no utilizar LeakGuard para prestar servicios a entidades restringidas de ese tipo."
+        ]
+      },
+      {
+        title: "9. Privacidad y registro de auditoría",
+        icon: Lock,
+        content: [
+          "Al utilizar LeakGuard, usted reconoce y acepta que sus acciones en la plataforma, incluidos los metadatos de sus consultas, están sujetas a registro con fines de seguridad, auditoría y cumplimiento normativo, según se describe en nuestra Política de Privacidad. Utilizamos K-Anonymity y hash parcial para proteger la confidencialidad de los términos de búsqueda específicos; el texto legible de la consulta no se almacena en el servidor. Los datos personales de registro (nombre y correo electrónico) se utilizan estrictamente para configurar el perfil y enviar alertas; no vendemos ni comercializamos la información personal de nuestros usuarios."
+        ]
+      },
+      {
+        title: "10. Uso ético y cero retención de muestras",
+        icon: FileText,
+        content: [
+          "LeakGuard está firmemente comprometido con la aplicación ética de la inteligencia de amenazas. Nuestra plataforma existe estrictamente con fines informativos y defensivos, capacitando a las organizaciones para identificar y mitigar la exposición digital. LeakGuard NO almacena, aloja, replica ni retiene muestras de datos en bruto, contraseñas ni materiales originales procedentes de filtraciones, hacks o leaks de terceros. Nuestros sistemas procesan metadatos efímeros únicamente para calcular el riesgo. Al utilizar este servicio, usted se obliga legalmente a utilizar esta información exclusivamente de manera ética, defensiva y conforme a la ley, sin causar daño ni explotar las vulnerabilidades de terceros."
         ]
       }
     ],
-    footerNote: "El uso y la responsabilidad sobre los datos consultados van sobre cada usuario. Si no está de acuerdo con estos términos, le solicitamos que se abstenga de utilizar este servicio."
+    footerNote: "El uso y la responsabilidad sobre los datos consultados recaen en cada usuario. Si no está de acuerdo con estos términos, le solicitamos que se abstenga de utilizar este servicio."
   },
   en: {
     title: "Terms of Service & Legal Notice",
     subtitle: "Regulatory framework and conditions of use for LeakGuard",
-    lastUpdated: "Last updated: June 22, 2026",
+    lastUpdated: "Last updated: June 23, 2026",
     intro: "Welcome to LeakGuard. Before using our OSINT and threat intelligence platform, we ask that you carefully read this legal notice. Accessing and using this site implies full acceptance of these terms.",
     sections: [
       {
-        title: "1. Purpose of the Platform",
-        icon: FileText,
-        content: [
-          "LeakGuard is a tool developed exclusively for cybersecurity, education, and preventive threat intelligence. Its purpose is to allow individuals and organizations to check if their credential information or asset exposure has been compromised in public data breaches.",
-          "The service is designed to mitigate cyber risks by providing timely alerts and automated remediation recommendations."
-        ]
-      },
-      {
-        title: "2. Technical Neutrality & Disclaimer of Liability",
+        title: "1. Authorization and Lawful Use (CFAA Compliance)",
         icon: ShieldAlert,
         content: [
-          "LeakGuard is a passive querying and indexing platform. We explicitly state that we have no relationship, direct or indirect, with any intrusions, hacks, data theft, or cyberattacks.",
-          "Our activity is strictly limited to gathering, processing, and publicizing information that has already been publicly indexed and made available in cyberspace, including specialized forums and open sources (OSINT).",
-          "Similar to internationally recognized platforms like Intelligence X (IntelX) or Have I Been Pwned, we operate as a neutral indexing search engine without participating in the malicious distribution of data."
+          "You represent and warrant that you are the authorized owner, or have explicit, verifiable written consent from the owner, of all domains, email addresses, phone numbers, or other digital assets you query through the LeakGuard platform. Unauthorized querying of third-party assets is strictly prohibited and may constitute a violation of the Computer Fraud and Abuse Act (18 U.S.C. § 1030) and other applicable local, state, and federal laws. LeakGuard reserves the right to suspend or terminate your account immediately upon suspicion of unauthorized use and to report such activity to law enforcement."
         ]
       },
       {
-        title: "3. Redaction and Censorship of Credentials",
+        title: "2. Strictly Defensive Use and Prohibited Conduct",
+        icon: Ban,
+        content: [
+          "LeakGuard is provided exclusively as a defensive threat intelligence tool. You expressly agree that you will NOT use the platform, its data, or its API for: (a) Credential stuffing, password spraying, or attempting unauthorized access to any system, network, or account. (b) Doxing, harassment, stalking, extortion, or corporate espionage. (c) Any action that violates applicable local, state, national, or international law."
+        ]
+      },
+      {
+        title: "3. Disclaimer of Warranties (Data \"AS IS\")",
+        icon: FileText,
+        content: [
+          "THE SERVICE, INCLUDING ALL OSINT AND THREAT INTELLIGENCE DATA, IS PROVIDED ON AN \"AS IS\" AND \"AS AVAILABLE\" BASIS. Because LeakGuard aggregates metadata from third-party breaches, compromised forums, and dark web indices, we cannot and do not warrant the accuracy, completeness, legality, or reliability of any information provided. TO THE FULLEST EXTENT PERMITTED BY LAW, LEAKGUARD EXPRESSLY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
+        ]
+      },
+      {
+        title: "4. Indemnification",
+        icon: Scale,
+        content: [
+          "You agree to defend, indemnify, and hold harmless LeakGuard, its founders, affiliates, employees, and agents from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your violation of these Terms of Service, your unauthorized access to third-party assets, or your misuse of the threat intelligence data provided by the platform."
+        ]
+      },
+      {
+        title: "5. Nature of Services and Data Hosting",
         icon: EyeOff,
         content: [
-          "To safeguard the security of affected individuals, LeakGuard strictly redacts/censors passwords and sensitive data in plaintext.",
-          "The system will never publicly display or store complete readable passwords. It only displays partially hidden strings and calculates risk indexes to alert the user of the critical need to change their credentials."
+          "LeakGuard operates solely as a search engine and analytical index for metadata related to security incidents. LeakGuard does not host, store, or distribute the original compromised data dumps or raw hacking materials. To protect privacy, all queries are subjected to server-side censorship and K-Anonymity protocols. Credential and identity fields are censored on the server before any API response is sent to the client; plaintext passwords are never transmitted. You acknowledge that viewing exposed metadata does not grant you ownership or rights to exploit said data."
         ]
       },
       {
-        title: "4. Privacy & Data Handling",
-        icon: Lock,
+        title: "6. Limitation of Liability",
+        icon: FileText,
         content: [
-          "User data: Personal data collected during registration (such as name and email address) is used strictly to set up the user profile and to deliver automated alerts and breach notifications.",
-          "No commercialization: We guarantee that we do not sell, distribute, or trade our users' personal information.",
-          "No invasive logs: LeakGuard does not store specific search queries made by users or the IP addresses from which queries originate, ensuring full anonymity for security audits."
+          "TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL LEAKGUARD, ITS DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES. UNDER NO CIRCUMSTANCES WILL LEAKGUARD'S TOTAL LIABILITY EXCEED THE AMOUNT YOU PAID TO THE COMPANY IN THE PAST TWELVE (12) MONTHS, OR ONE HUNDRED U.S. DOLLARS ($100.00), WHICHEVER IS GREATER."
         ]
       },
       {
-        title: "5. Legal Framework and Jurisdiction",
+        title: "7. Governing Law and Arbitration",
         icon: Globe,
         content: [
-          "This platform is backed and operates under the laws of the United States of America regarding the indexing of publicly accessible information and the protection of internet security and research tools.",
-          "Any misuse of the information obtained through LeakGuard is the sole responsibility of the end user. The user agrees not to use this platform for unlawful activities, harassment, extortion, or digital intrusions."
+          "These Terms shall be governed by the laws of the State of Delaware, without respect to its conflict of laws principles. Any dispute arising from these Terms shall be resolved exclusively through binding, individual arbitration, and you explicitly waive any right to participate in a class action lawsuit or class-wide arbitration."
+        ]
+      },
+      {
+        title: "8. Export Compliance and Sanctions",
+        icon: Globe,
+        content: [
+          "You represent and warrant that you are not located in a country subject to a U.S. Government embargo, nor are you listed on any U.S. Government list of prohibited or restricted parties (such as the OFAC Specially Designated Nationals list). You agree not to use LeakGuard to provide services to any such restricted entities."
+        ]
+      },
+      {
+        title: "9. Privacy and Audit Logging",
+        icon: Lock,
+        content: [
+          "By using LeakGuard, you acknowledge and agree that your actions on the platform, including metadata of your queries, are subject to logging for security, auditing, and compliance purposes as outlined in our Privacy Policy. We utilize K-Anonymity and partial hashing to protect the confidentiality of specific search terms; plaintext query strings are not stored on the server. Registration data (name and email) is used strictly to set up your profile and deliver alerts; we do not sell or trade our users' personal information."
+        ]
+      },
+      {
+        title: "10. Ethical Use and Zero-Retention of Samples",
+        icon: FileText,
+        content: [
+          "LeakGuard is firmly committed to the ethical application of Threat Intelligence. Our platform exists strictly for informational and defensive purposes, empowering organizations to identify and mitigate digital exposure. LeakGuard DOES NOT store, host, mirror, or retain any raw data samples, passwords, or original materials originating from third-party breaches, hacks, or leaks. Our systems process ephemeral metadata solely to calculate risk. By using this service, you legally bind yourself to utilize this information exclusively in an ethical, defensive, and compliant manner, without causing harm or exploiting the vulnerabilities of others."
         ]
       }
     ],
@@ -114,49 +170,77 @@ export const termsData: Record<Lang, {
   ru: {
     title: "Условия использования и правовое уведомление",
     subtitle: "Правовая база и правила использования платформы LeakGuard",
-    lastUpdated: "Последнее обновление: 22 июня 2026 г.",
+    lastUpdated: "Последнее обновление: 23 июня 2026 г.",
     intro: "Добро пожаловать в LeakGuard. Перед использованием нашей OSINT-платформы анализа угроз безопасности просим вас внимательно ознакомиться с этим юридическим уведомлением. Использование сайта означает полное согласие с данными условиями.",
     sections: [
       {
-        title: "1. Назначение платформы",
-        icon: FileText,
-        content: [
-          "LeakGuard — это инструмент, разработанный исключительно для целей кибербезопасности, обучения и превентивного выявления угроз. Его цель — позволить частным лицам и организациям проверить, были ли их учетные данные или конфиденциальные активы скомпрометированы в результате публичных утечек данных.",
-          "Сервис предназначен для снижения киберрисков путем предоставления своевременных оповещений и автоматических рекомендаций по устранению последствий."
-        ]
-      },
-      {
-        title: "2. Техническая нейтральность и ограничение ответственности",
+        title: "1. Авторизация и законное использование (соответствие CFAA)",
         icon: ShieldAlert,
         content: [
-          "LeakGuard является пассивной поисковой и индексирующей платформой. Мы официально заявляем, что не имеем никакого отношения — прямого или косвенного — к хакерским атакам, краже данных или любым кибератакам.",
-          "Наша деятельность ограничивается сбором, обработкой и предоставлением информации, которая уже была публично проиндексирована и находится в открытом доступе, включая специализированные форумы и открытые источники (OSINT).",
-          "Подобно всемирно известным платформам, таким как Intelligence X (IntelX) или Have I Been Pwned, мы работаем как нейтральный поисковый индекс и не участвуем в злонамеренном распространении данных."
+          "Вы заявляете и гарантируете, что являетесь уполномоченным владельцем либо имеете явное, проверяемое письменное согласие владельца на все домены, адреса электронной почты, номера телефонов или иные цифровые активы, которые вы запрашиваете через платформу LeakGuard. Несанкционированный запрос активов третьих лиц строго запрещён и может нарушать Computer Fraud and Abuse Act (18 U.S.C. § 1030) и иные применимые местные, региональные и федеральные законы. LeakGuard оставляет за собой право немедленно приостановить или удалить вашу учётную запись при подозрении в несанкционированном использовании и сообщить о такой деятельности правоохранительным органам."
         ]
       },
       {
-        title: "3. Цензурирование и скрытие учетных данных",
+        title: "2. Строго оборонительное использование и запрещённое поведение",
+        icon: Ban,
+        content: [
+          "LeakGuard предоставляется исключительно как оборонительный инструмент threat intelligence. Вы прямо соглашаетесь НЕ использовать платформу, её данные или API для: (a) credential stuffing, password spraying или попыток несанкционированного доступа к любой системе, сети или учётной записи; (b) доксинга, преследования, шантажа или корпоративного шпионажа; (c) любых действий, нарушающих применимое местное, региональное, национальное или международное законодательство."
+        ]
+      },
+      {
+        title: "3. Отказ от гарантий (данные «как есть»)",
+        icon: FileText,
+        content: [
+          "СЕРВИС, ВКЛЮЧАЯ ВСЕ ДАННЫЕ OSINT И THREAT INTELLIGENCE, ПРЕДОСТАВЛЯЕТСЯ НА УСЛОВИЯХ «КАК ЕСТЬ» И «ПО МЕРЕ ДОСТУПНОСТИ». Поскольку LeakGuard агрегирует метаданные из сторонних утечек, скомпрометированных форумов и индексов dark web, мы не можем и не гарантируем точность, полноту, законность или надёжность предоставляемой информации. В МАКСИМАЛЬНО ДОПУСТИМОЙ ЗАКОНОМ СТЕПЕНИ LEAKGUARD ПРЯМО ОТКАЗЫВАЕТСЯ ОТ ВСЕХ ГАРАНТИЙ, ЯВНЫХ, ПОДРАЗУМЕВАЕМЫХ, УСТАНОВЛЕННЫХ ЗАКОНОМ ИЛИ ИНЫХ, ВКЛЮЧАЯ, ПОМИМО ПРОЧЕГО, ГАРАНТИИ ТОВАРНОЙ ПРИГОДНОСТИ ИЛИ ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЁННОЙ ЦЕЛИ."
+        ]
+      },
+      {
+        title: "4. Возмещение убытков",
+        icon: Scale,
+        content: [
+          "Вы соглашаетесь защищать, возмещать убытки и ограждать LeakGuard, её основателей, аффилированных лиц, сотрудников и представителей от любых претензий, обязательств, ущерба, судебных решений, компенсаций, потерь, расходов или гонораров (включая разумные гонорары адвокатов), возникающих в связи с нарушением вами настоящих Условий, несанкционированным доступом к активам третьих лиц или неправомерным использованием данных threat intelligence, предоставляемых платформой."
+        ]
+      },
+      {
+        title: "5. Характер услуг и хранение данных",
         icon: EyeOff,
         content: [
-          "Для защиты безопасности затронутых лиц LeakGuard в обязательном порядке применяет маскирование и цензурирование паролей и конфиденциальных данных, находящихся в открытом виде.",
-          "Система никогда не отображает публично и не сохраняет полные читаемые пароли. Мы показываем только частично скрытые строки и рассчитываем индексы риска, чтобы предупредить о необходимости смены паролей."
+          "LeakGuard действует исключительно как поисковая система и аналитический индекс метаданных, связанных с инцидентами безопасности. LeakGuard не размещает, не хранит и не распространяет оригинальные скомпрометированные дампы данных или сырые материалы взлома. Для защиты конфиденциальности все запросы подвергаются серверной цензуре и протоколам K-Anonymity. Вы признаёте, что просмотр раскрытых метаданных не предоставляет вам права собственности или права эксплуатировать эти данные."
         ]
       },
       {
-        title: "4. Конфиденциальность и обработка данных",
-        icon: Lock,
+        title: "6. Ограничение ответственности",
+        icon: FileText,
         content: [
-          "Данные пользователей: Персональные данные, собираемые при регистрации (например, имя и электронная почта), используются строго для настройки профиля пользователя и отправки автоматических уведомлений об утечках.",
-          "Без коммерциализации: Мы гарантируем, что не продаем, не распространяем и не передаем личную информацию наших пользователей третьим лицам.",
-          "Без хранения логов: LeakGuard не сохраняет поисковые запросы пользователей, а также IP-адреса, с которых выполняются запросы, обеспечивая полную анонимность аудита безопасности."
+          "В МАКСИМАЛЬНО ДОПУСТИМОЙ ПРИМЕНИМЫМ ЗАКОНОМ СТЕПЕНИ LEAKGUARD, ЕЁ ДИРЕКТОРЫ, СОТРУДНИКИ ИЛИ ПРЕДСТАВИТЕЛИ НИ ПРИ КАКИХ ОБСТОЯТЕЛЬСТВАХ НЕ НЕСУТ ОТВЕТСТВЕННОСТИ ЗА КОСВЕННЫЙ, ШТРАФНОЙ, СЛУЧАЙНЫЙ, СПЕЦИАЛЬНЫЙ, ПОСЛЕДУЮЩИЙ ИЛИ ПРИМЕРНЫЙ УЩЕРБ. НИ ПРИ КАКИХ ОБСТОЯТЕЛЬСТВАХ СОВОКУПНАЯ ОТВЕТСТВЕННОСТЬ LEAKGUARD НЕ ПРЕВЫСИТ СУММУ, УПЛАЧЕННУЮ ВАМИ КОМПАНИИ ЗА ПОСЛЕДНИЕ ДВЕНАДЦАТЬ (12) МЕСЯЦЕВ, ИЛИ СТО ДОЛЛАРОВ США ($100.00) — В ЗАВИСИМОСТИ ОТ ТОГО, ЧТО БОЛЬШЕ."
         ]
       },
       {
-        title: "5. Законодательство и юрисдикция",
+        title: "7. Применимое право и арбитраж",
         icon: Globe,
         content: [
-          "Платформа функционирует в соответствии с законодательством Соединенных Штатов Америки в части индексирования общедоступной информации и защиты исследовательских инструментов интернет-безопасности.",
-          "Любое неправомерное использование информации, полученной через LeakGuard, является исключительной ответственностью конечного пользователя. Пользователь обязуется не использовать эту платформу для незаконной деятельности, шантажа, вымогательства или несанкционированного доступа."
+          "Настоящие Условия регулируются законодательством штата Делавэр без учёта норм коллизионного права. Любой спор, возникающий из настоящих Условий, подлежит исключительному разрешению в обязательном индивидуальном арбитраже, и вы прямо отказываетесь от права участвовать в коллективном иске или коллективном арбитраже."
+        ]
+      },
+      {
+        title: "8. Экспортный контроль и санкции",
+        icon: Globe,
+        content: [
+          "Вы заявляете и гарантируете, что не находитесь в стране, на которую распространяется эмбарго правительства США, и не включены ни в один государственный список запрещённых или ограниченных лиц (например, список OFAC Specially Designated Nationals). Вы соглашаетесь не использовать LeakGuard для оказания услуг таким ограниченным лицам."
+        ]
+      },
+      {
+        title: "9. Конфиденциальность и журналирование аудита",
+        icon: Lock,
+        content: [
+          "Используя LeakGuard, вы признаёте и соглашаетесь, что ваши действия на платформе, включая метаданные запросов, подлежат журналированию в целях безопасности, аудита и соответствия требованиям, как описано в нашей Политике конфиденциальности. Мы используем K-Anonymity и частичное хеширование для защиты конфиденциальности конкретных поисковых запросов. Регистрационные данные (имя и email) используются строго для настройки профиля и отправки оповещений; мы не продаём и не передаём личную информацию пользователей в коммерческих целях."
+        ]
+      },
+      {
+        title: "10. Этичное использование и нулевое хранение образцов",
+        icon: FileText,
+        content: [
+          "LeakGuard твёрдо привержен этичному применению threat intelligence. Наша платформа существует исключительно в информационных и оборонительных целях, помогая организациям выявлять и снижать цифровую экспозицию. LeakGuard НЕ хранит, не размещает, не зеркалирует и не удерживает сырые образцы данных, пароли или оригинальные материалы из сторонних утечек, взломов или leaks. Наши системы обрабатывают эфемерные метаданные исключительно для расчёта риска. Используя сервис, вы юридически обязуетесь применять эту информацию исключительно этично, оборонительно и в соответствии с законом, не причиняя вреда и не эксплуатируя уязвимости других."
         ]
       }
     ],
@@ -165,49 +249,77 @@ export const termsData: Record<Lang, {
   he: {
     title: "תנאי שימוש והצהרה משפטית",
     subtitle: "מסגרת רגולטורית ותנאי שימוש עבור LeakGuard",
-    lastUpdated: "עדכון אחרון: 22 ביוני 2026",
+    lastUpdated: "עדכון אחרון: 23 ביוני 2026",
     intro: "ברוכים הבאים ל-LeakGuard. לפני השימוש בפלטפורמת ה-OSINT ומודיעין האיומים שלנו, אנו מבקשים ממך לקרוא בעיון הצהרה משפטית זו. הגישה והשימוש באתר מהווים הסכמה מלאה לתנאים אלו.",
     sections: [
       {
-        title: "1. מטרת הפלטפורמה",
-        icon: FileText,
-        content: [
-          "LeakGuard הוא כלי שפותח אך ורק למטרות אבטחת מידע, חינוך ומודיעין מניעתי. מטרתו לאפשר לאנשים פרטיים ולארגונים לבדוק אם פרטי הגישה או הנכסים הדיגיטליים שלהם נחשפו בדליפות מידע ציבוריות.",
-          "השירות נועד לצמצם סיכוני סייבר על ידי מתן התראות בזמן והמלצות תיקון אוטומטיות."
-        ]
-      },
-      {
-        title: "2. ניטרליות טכנית ופטור מאחריות",
+        title: "1. הרשאה ושימוש חוקי (עמידה ב-CFAA)",
         icon: ShieldAlert,
         content: [
-          "LeakGuard היא פלטפורמת אינדוקס ושאילתות פסיבית. אנו מצהירים באופן מפורש שאין לנו כל קשר, ישיר או עקיף, לפריצות, גניבת מידע או מתקפות סייבר.",
-          "הפעילות שלנו מוגבלת לאיסוף, עיבוד והצגת מידע שכבר אונדקס באופן ציבורי וזמין במרחב הקיברנטי, כולל פורומים ייעודיים ומקורות גלויים (OSINT).",
-          "בדומה לפלטפורמות מוכרות ברחבי העולם כגון Intelligence X (IntelX) או Have I Been Pwned, אנו פועלים כמנוע חיפוש ואינדוקס ניטרלי ללא השתתפות בהפצה זדונית של נתונים."
+          "אתה מצהיר ומתחייב כי אתה הבעלים המורשה, או שיש לך הסכמה כתובה מפורשת וניתנת לאימות מהבעלים, לכל הדומיינים, כתובות הדוא\"ל, מספרי הטלפון או נכסים דיגיטליים אחרים שאתה שולח לבדיקה בפלטפורמת LeakGuard. שליחת שאילתות לא מורשות על נכסי צד שלישי אסורה בהחלט ועלולה להוות הפרה של חוק Computer Fraud and Abuse Act (18 U.S.C. § 1030) וחוקים מקומיים, מדינתיים ופדרליים אחרים. LeakGuard שומרת לעצמה את הזכות להשעות או לסגור את חשבונך מיידית בחשד לשימוש לא מורשה ולדווח על כך לרשויות האכיפה."
         ]
       },
       {
-        title: "3. צנזור והסתרת סיסמאות",
+        title: "2. שימוש הגנתי בלבד והתנהגות אסורה",
+        icon: Ban,
+        content: [
+          "LeakGuard מסופקת אך ורק ככלי מודיעין איומים הגנתי. אתה מסכים במפורש שלא תשתמש בפלטפורמה, בנתוניה או ב-API שלה עבור: (א) credential stuffing, password spraying או ניסיונות גישה לא מורשית לכל מערכת, רשת או חשבון; (ב) doxing, הטרדה, מעקב, סחיטה או ריגול תאגידי; (ג) כל פעולה המפרה חוק מקומי, מדינתי, לאומי או בינלאומי חל."
+        ]
+      },
+      {
+        title: "3. כתב ויתור על אחריות (נתונים \"כפי שהם\")",
+        icon: FileText,
+        content: [
+          "השירות, לרבות כל נתוני ה-OSINT ומודיעין האיומים, מסופק על בסיס \"כפי שהם\" ו\"כפי זמינות\". מכיוון ש-LeakGuard מצטברת מטא-נתונים מדליפות צד שלישי, פורומים שנפרצו ואינדקסים של dark web, איננו יכולים ואיננו מתחייבים לדיוק, שלמות, חוקיות או אמינות של המידע שמסופק. במידה המרבית המותרת בחוק, LEAKGUARD מוותרת במפורש על כל האחריות, בין אם מפורשת, משתמעת, חוקית או אחרת, לרבות אך לא רק אחריות לסחירות או להתאמה למטרה מסוימת."
+        ]
+      },
+      {
+        title: "4. פיצוי והגנה",
+        icon: Scale,
+        content: [
+          "אתה מסכים להגן, לפצות ולשמור על LeakGuard, מייסדיה, חברותיה, עובדיה וסוכניה מפני כל תביעה, אחריות, נזק, פסק דין, פיצוי, הפסד, עלות, הוצאה או שכר טרחה (לרבות שכר טרחה סביר של עורכי דין) הנובעים מהפרת תנאי שימוש אלה, גישה לא מורשית לנכסי צד שלישי או שימוש לרעה בנתוני מודיעין האיומים שמספקת הפלטפורמה."
+        ]
+      },
+      {
+        title: "5. אופי השירות ואחסון נתונים",
         icon: EyeOff,
         content: [
-          "על מנת להגן על אבטחת המשתמשים שנפגעו, LeakGuard מיישמת חובת צנזור על סיסמאות ונתונים רגישים בטקסט פשוט.",
-          "המערכת לעולם לא תציג בפומבי או תשמור סיסמאות קריאות מלאות. התצוגה מוגבלת לסיסמאות מוסתרות בחלקן לצד חישוב מדדי סיכון כדי להתריע על הצורך בהחלפת סיסמה דחופה."
+          "LeakGuard פועלת אך ורק כמנוע חיפוש ואינדקס אנליטי למטא-נתונים הקשורים לאירועי אבטחה. LeakGuard אינה מארחת, מאחסנת או מפיצה את דמפי הנתונים המקוריים שנפרצו או חומרי פריצה גולמיים. להגנת הפרטיות, כל השאילתות עוברות צנזורה בצד השרת ופרוטוקולי K-Anonymity. אתה מכיר בכך שצפייה במטא-נתונים חשופים אינה מעניקה לך בעלות או זכויות לנצל נתונים אלה."
         ]
       },
       {
-        title: "4. פרטיות וטיפול בנתונים",
-        icon: Lock,
+        title: "6. הגבלת אחריות",
+        icon: FileText,
         content: [
-          "נתוני משתמש: נתונים אישיים שנאספים במהלך ההרשמה (כגון שם ואימייל) משמשים אך ורק להגדרת פרופיל המשתמש ושליחת התראות ודליפות אוטומטיות.",
-          "ללא מסחור: אנו מתחייבים כי איננו מוכרים, מפיצים או סוחרים במידע האישי של המשתמשים שלנו.",
-          "ללא יומני מעקב פולשניים: LeakGuard אינה שומרת את מונחי החיפוש הספציפיים המבוצעים על ידי משתמשים או את כתובות ה-IP שמהן מבוצעות השאילתות, ובכך שומרת על אנונימיות מלאה של בדיקות האבטחה."
+          "במידה המרבית המותרת בחוק החל, בשום מקרה לא תישא LeakGuard, מנהליה, עובדיה או סוכניה באחריות לנזקים עקיפים, עונשיים, מקריים, מיוחדים, תוצאתיים או לדוגמה. בשום נסיבות לא תעלה האחריות הכוללת של LeakGuard על הסכום ששילמת לחברה בשנים עשר (12) החודשים האחרונים, או מאה דולר אמריקאי ($100.00) — לפי הגבוה מביניהם."
         ]
       },
       {
-        title: "5. מסגרת משפטית וסמכות שיפוט",
+        title: "7. דין חל וארביטראז'",
         icon: Globe,
         content: [
-          "פלטפורמה זו פועלת ומגובה תחת החוק של ארצות הברית של אמריקה (USA) בכל הנוגע לאינדוקס מידע נגיש לציבור והגנה על כלי מחקר ואבטחת אינטרנט.",
-          "כל שימוש לרעה במידע המתקבל באמצעות LeakGuard הוא באחריותו הבלעדית של משתמש הקצה. המשתמש מתחייב שלא להשתמש בפלטפורמה זו לפעילויות בלתי חוקיות, הטרדה, סחיטה או חדירה דיגיטלית."
+          "תנאים אלה יוסדרו על פי חוקי מדינת דלאוור, ללא התחשבות בעקרונות ברירת הדין. כל מחלוקת הנובעת מתנאים אלה תיפתר אך ורק באמצעות ארביטראז' מחייב אישי, ואתה מוותר במפורש על כל זכות להשתתף בתביעה ייצוגית או ארביטראז' קבוצתי."
+        ]
+      },
+      {
+        title: "8. ציות לייצוא וסנקציות",
+        icon: Globe,
+        content: [
+          "אתה מצהיר ומתחייב שאינך נמצא במדינה הכפופה לאמברגו של ממשלת ארה\"ב, ואינך רשום ברשימת ממשלת ארה\"ב של גורמים אסורים או מוגבלים (כגון רשימת OFAC Specially Designated Nationals). אתה מסכים שלא להשתמש ב-LeakGuard כדי לספק שירותים לגורמים מוגבלים כאלה."
+        ]
+      },
+      {
+        title: "9. פרטיות ורישום ביקורת",
+        icon: Lock,
+        content: [
+          "בשימוש ב-LeakGuard, אתה מכיר ומסכים שפעולותיך בפלטפורמה, לרבות מטא-נתונים של השאילתות שלך, כפופות לרישום למטרות אבטחה, ביקורת וציות, כמתואר במדיניות הפרטיות שלנו. אנו משתמשים ב-K-Anonymity ובגיבוב חלקי כדי להגן על סודיות מונחי החיפוש הספציפיים. נתוני הרשמה (שם ודוא\"ל) משמשים אך ורק להגדרת הפרופיל ושליחת התראות; איננו מוכרים או סוחרים במידע האישי של המשתמשים שלנו."
+        ]
+      },
+      {
+        title: "10. שימוש אתי ואפס שמירת דגימות",
+        icon: FileText,
+        content: [
+          "LeakGuard מחויבת באופן עמוק ליישום אתי של מודיעין איומים. הפלטפורמה שלנו קיימת אך ורק למטרות מידע והגנה, ומאפשרת לארגונים לזהות ולהפחית חשיפה דיגיטלית. LeakGuard אינה מאחסנת, מארחת, משכפלת או שומרת דגימות נתונים גולמיות, סיסמאות או חומרים מקוריים מדליפות, פריצות או leaks של צד שלישי. המערכות שלנו מעבדות מטא-נתונים זמניים אך ורק לחישוב סיכון. בשימוש בשירות זה, אתה מתחייב משפטית להשתמש במידע זה אך ורק באופן אתי, הגנתי ותואם חוק, מבלי לגרום נזק או לנצל פגיעויות של אחרים."
         ]
       }
     ],

@@ -137,6 +137,7 @@ export type Translations = {
   col_country: string;
   consulted_title: string;
   consulted_clear: string;
+  consulted_hash_label: string;
   darkweb_title: string;
   recent_breaches_title: string;
   no_consulted: string;
@@ -231,8 +232,9 @@ export type Translations = {
   // No results
   no_results_filter: string;
   footer_terms: string;
-  login_accept_terms_prefix: string;
+  login_cfaa_consent: string;
   login_accept_terms_link: string;
+  login_terms_required_error: string;
 };
 
 const translations: Record<Lang, Translations> = {
@@ -339,6 +341,7 @@ const translations: Record<Lang, Translations> = {
     col_country: "País",
     consulted_title: "Consultas realizadas",
     consulted_clear: "Limpiar",
+    consulted_hash_label: "Consulta",
     darkweb_title: "Dark Web / Foros clandestinos",
     recent_breaches_title: "Filtraciones públicas recientes",
     no_consulted: "Aún no realizaste consultas.",
@@ -423,8 +426,10 @@ const translations: Record<Lang, Translations> = {
     darkweb_indicator: "Indicador",
     no_results_filter: "No hay resultados con los filtros aplicados.",
     footer_terms: "Términos y Condiciones",
-    login_accept_terms_prefix: "Acepto los ",
-    login_accept_terms_link: "términos y condiciones",
+    login_cfaa_consent:
+      "Declaro y garantizo que soy el titular legítimo, o que cuento con autorización escrita explícita del titular, para auditar los activos digitales que envío a LeakGuard. Acepto utilizar esta plataforma exclusivamente con fines defensivos de ciberseguridad y acepto los ",
+    login_accept_terms_link: "Términos de Servicio",
+    login_terms_required_error: "Debe aceptar los términos y condiciones.",
   },
 
   en: {
@@ -530,6 +535,7 @@ const translations: Record<Lang, Translations> = {
     col_country: "Country",
     consulted_title: "Queries Made",
     consulted_clear: "Clear",
+    consulted_hash_label: "Query",
     darkweb_title: "Dark Web / Underground Forums",
     recent_breaches_title: "Recent Public Breaches",
     no_consulted: "No queries made yet.",
@@ -614,8 +620,10 @@ const translations: Record<Lang, Translations> = {
     darkweb_indicator: "Indicator",
     no_results_filter: "No results with current filters.",
     footer_terms: "Terms & Conditions",
-    login_accept_terms_prefix: "I accept the ",
-    login_accept_terms_link: "terms and conditions",
+    login_cfaa_consent:
+      "I represent and warrant that I am the lawful owner, or have explicit written authorization from the owner, to audit the digital assets I submit to LeakGuard. I agree to use this platform strictly for defensive cybersecurity purposes and accept the ",
+    login_accept_terms_link: "Terms of Service",
+    login_terms_required_error: "You must accept the terms and conditions.",
   },
 
   ru: {
@@ -721,6 +729,7 @@ const translations: Record<Lang, Translations> = {
     col_country: "Страна",
     consulted_title: "Выполненные запросы",
     consulted_clear: "Очистить",
+    consulted_hash_label: "Запрос",
     darkweb_title: "Тёмная сеть / Подпольные форумы",
     recent_breaches_title: "Недавние публичные утечки",
     no_consulted: "Запросов пока нет.",
@@ -805,8 +814,10 @@ const translations: Record<Lang, Translations> = {
     darkweb_indicator: "Индикатор",
     no_results_filter: "Нет результатов с текущими фильтрами.",
     footer_terms: "Условия использования",
-    login_accept_terms_prefix: "Я принимаю ",
-    login_accept_terms_link: "условия использования",
+    login_cfaa_consent:
+      "Я заявляю и гарантирую, что являюсь законным владельцем либо имею явное письменное разрешение владельца на аудит цифровых активов, которые я отправляю в LeakGuard. Я соглашаюсь использовать эту платформу исключительно в оборонительных целях кибербезопасности и принимаю ",
+    login_accept_terms_link: "Условия использования",
+    login_terms_required_error: "Вы должны принять условия использования.",
   },
 
   he: {
@@ -912,6 +923,7 @@ const translations: Record<Lang, Translations> = {
     col_country: "מדינה",
     consulted_title: "שאילתות שבוצעו",
     consulted_clear: "ניקוי",
+    consulted_hash_label: "שאילתה",
     darkweb_title: "רשת אפלה / פורומים מחתרתיים",
     recent_breaches_title: "דליפות ציבוריות אחרונות",
     no_consulted: "עדיין לא בוצעו שאילתות.",
@@ -996,8 +1008,10 @@ const translations: Record<Lang, Translations> = {
     darkweb_indicator: "מחוון",
     no_results_filter: "אין תוצאות עם הפילטרים הנוכחיים.",
     footer_terms: "תנאי שימוש",
-    login_accept_terms_prefix: "אני מסכים ל",
+    login_cfaa_consent:
+      "אני מצהיר ומתחייב כי אני הבעלים החוקי, או שיש לי הרשאה כתובה מפורשת מהבעלים, לבצע ביקורת על הנכסים הדיגיטליים שאני שולח ל-LeakGuard. אני מסכים להשתמש בפלטפורמה זו אך ורק למטרות הגנתיות של אבטחת סייבר ומקבל את ",
     login_accept_terms_link: "תנאי השימוש",
+    login_terms_required_error: "עליך לאשר את תנאי השימוש.",
   },
 };
 

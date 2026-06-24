@@ -70,6 +70,7 @@ def test_parse_osint_response_with_data():
         assert "login" in record
         assert "credential" in record
         assert "severity" in record
+        assert "normalized" not in record
         assert "•" in record["login"] or "*" in record["login"] or record["login"] == "—"
         if record["credential"] != "—":
             assert "•" in record["credential"]
